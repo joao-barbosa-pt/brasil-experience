@@ -1,0 +1,1042 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin="" />
+<link href="https://fonts.googleapis.com/css2?family=Archivo:wght@400;500;600;800&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet" />
+<style>
+  html { background: #0B0D0F; }
+  body { margin: 0; background: #0B0D0F; color: #F5F1EA; font-family: Archivo, system-ui, sans-serif; -webkit-font-smoothing: antialiased; overflow-x: clip; }
+  a { color: #FF5B2E; text-decoration: none; }
+  a:hover { color: #F5F1EA; }
+  button { font-family: inherit; -webkit-tap-highlight-color: transparent; }
+  @keyframes hint { 0%,100% { opacity: .3; transform: translateY(0) } 50% { opacity: .9; transform: translateY(7px) } }
+  @keyframes pulse { 0%,100% { opacity: .25 } 50% { opacity: .8 } }
+  @keyframes float { 0%,100% { transform: translateY(0) } 50% { transform: translateY(-8px) } }
+  @media (prefers-reduced-motion: reduce) { * { animation: none !important } }
+</style>
+</helmet>
+<div ref="{{ setRoot }}" style="position: relative; width: 100%; overflow-x: clip; background: #0B0D0F;">
+
+  <div ref="{{ setLoader }}" style="position: fixed; inset: 0; z-index: 100; background: #0B0D0F; display: flex; flex-direction: column; justify-content: space-between; padding: 32px 22px; transition: opacity .9s ease, visibility .9s;">
+    <div style="font-family: 'IBM Plex Mono', monospace; font-size: 10px; letter-spacing: .24em; color: rgba(245,241,234,.45);">PORTO · 41.24° N</div>
+    <div>
+      <div style="font-weight: 400; font-size: clamp(24px, 7vw, 34px); line-height: 1.2; letter-spacing: -.02em; max-width: 30ch; color: rgba(245,241,234,.9);">Há um sítio onde o dia acaba com a praia a bater palmas.</div>
+      <div style="display: flex; align-items: baseline; gap: 14px; margin-top: 34px;">
+        <div ref="{{ setPct }}" style="font-weight: 800; font-size: clamp(48px, 16vw, 88px); letter-spacing: -.05em; line-height: .9; color: #FF5B2E; font-variant-numeric: tabular-nums;">0%</div>
+        <div style="font-family: 'IBM Plex Mono', monospace; font-size: 10px; letter-spacing: .2em; color: rgba(245,241,234,.45);">A CARREGAR<br />A VIAGEM</div>
+      </div>
+      <div style="height: 1px; background: rgba(245,241,234,.14); margin-top: 22px;"><div ref="{{ setLoadBar }}" style="height: 100%; width: 0%; background: #FF5B2E;"></div></div>
+    </div>
+  </div>
+
+  <div style="position: fixed; inset: 0 0 auto 0; height: 2px; background: rgba(245,241,234,.1); z-index: 90;">
+    <div ref="{{ setBar }}" style="height: 100%; width: 0%; background: #FF5B2E;"></div>
+  </div>
+
+  <section style="position: relative; height: 100svh; overflow: hidden; display: flex; flex-direction: column; justify-content: flex-end; padding: 0 clamp(22px, 6vw, 84px) 48px;">
+    <div data-depth="0.22" style="position: absolute; inset: -8%; background-image: url(img/corcovado.jpg); background-size: cover; background-position: 55% 40%; filter: saturate(.85) contrast(1.05); -webkit-mask-image: linear-gradient(180deg, #000 0 58%, rgba(0,0,0,.35) 84%, transparent 100%); mask-image: linear-gradient(180deg, #000 0 58%, rgba(0,0,0,.35) 84%, transparent 100%);"></div>
+    <div style="position: absolute; inset: 0; background: linear-gradient(180deg, rgba(11,13,15,.62) 0%, rgba(11,13,15,.10) 38%, rgba(11,13,15,.92) 86%, #0B0D0F 100%);"></div>
+    <div data-depth="0.06" style="position: relative;">
+      <div style="display: inline-flex; align-items: center; gap: 8px; padding: 7px 12px; border: 1px solid rgba(245,241,234,.28); border-radius: 100px; backdrop-filter: blur(8px); background: rgba(11,13,15,.28); font-family: 'IBM Plex Mono', monospace; font-size: 10px; letter-spacing: .18em;">
+        <span style="width: 5px; height: 5px; border-radius: 50%; background: #FF5B2E; animation: pulse 2s infinite;"></span>
+        <span>OPO → GIG</span>
+      </div>
+      <h1 style="font-weight: 800; font-size: clamp(46px, 11vw, 96px); line-height: .9; letter-spacing: -.045em; margin: 18px 0 0; text-transform: uppercase; text-wrap: balance;">E se<br />fôssemos?</h1>
+      <p style="max-width: 44ch; margin: 18px 0 0; font-size: clamp(16px, 1.5vw, 19px); line-height: 1.55; font-weight: 400; text-wrap: pretty; color: rgba(245,241,234,.8);">Sofia — não é um convite. É a viagem, antes de existir.</p>
+      <div style="display: flex; align-items: center; gap: 10px; margin-top: 34px; font-family: 'IBM Plex Mono', monospace; font-size: 10px; letter-spacing: .24em; color: rgba(245,241,234,.65); animation: hint 2.6s ease-in-out infinite;">
+        <span>DESLIZA</span>
+        <span style="width: 1px; height: 24px; background: linear-gradient(rgba(245,241,234,.8), transparent);"></span>
+      </div>
+    </div>
+  </section>
+
+  <section style="position: relative; padding: 96px clamp(22px, 6vw, 84px) 110px; background: radial-gradient(140% 70% at 50% 40%, #12171C, #0B0D0F 72%);">
+    <div style="font-family: 'IBM Plex Mono', monospace; font-size: 10px; letter-spacing: .26em; color: rgba(245,241,234,.4);">01 · PARTIDA</div>
+    <h2 style="font-weight: 600; font-size: clamp(28px, 5vw, 48px); line-height: 1.05; letter-spacing: -.03em; margin: 14px 0 26px; max-width: 32ch; text-wrap: balance;">Porto, 11:30 da manhã.<br /><span style="color: rgba(245,241,234,.42);">Duas horas antes de levantar.</span></h2>
+    <div data-depth="-0.1" style="border: 1px solid rgba(245,241,234,.14); border-radius: 18px; background: linear-gradient(150deg, rgba(245,241,234,.07), rgba(245,241,234,.02)); backdrop-filter: blur(6px); padding: 20px; box-shadow: 0 40px 70px -40px rgba(0,0,0,.9);">
+      <div style="display: flex; justify-content: space-between; align-items: flex-start; font-family: 'IBM Plex Mono', monospace; font-size: 10px; letter-spacing: .2em; color: rgba(245,241,234,.45);">
+        <span>CARTÃO DE EMBARQUE</span><span>21 · A</span>
+      </div>
+      <div style="display: flex; align-items: flex-end; gap: 14px; margin: 22px 0 6px;">
+        <div>
+          <div style="font-weight: 800; font-size: 34px; letter-spacing: -.03em; line-height: 1;">OPO</div>
+          <div style="font-family: 'IBM Plex Mono', monospace; font-size: 10px; letter-spacing: .16em; color: rgba(245,241,234,.45); margin-top: 6px;">PORTO</div>
+        </div>
+        <div style="flex: 1; height: 1px; background: repeating-linear-gradient(90deg, rgba(245,241,234,.35) 0 6px, transparent 6px 11px); margin-bottom: 16px;"></div>
+        <div style="text-align: right;">
+          <div style="font-weight: 800; font-size: 34px; letter-spacing: -.03em; line-height: 1; color: #FF5B2E;">GIG</div>
+          <div style="font-family: 'IBM Plex Mono', monospace; font-size: 10px; letter-spacing: .16em; color: rgba(245,241,234,.45); margin-top: 6px;">RIO DE JANEIRO</div>
+        </div>
+      </div>
+      <div style="display: grid; grid-template-columns: repeat(3, 1fr); gap: 12px; margin-top: 24px; padding-top: 18px; border-top: 1px solid rgba(245,241,234,.12);">
+        <div><div style="font-family: 'IBM Plex Mono', monospace; font-size: 9px; letter-spacing: .16em; color: rgba(245,241,234,.4);">DATA</div><div style="font-size: 14px; font-weight: 500; margin-top: 5px;">3 MAR 2027</div></div>
+        <div><div style="font-family: 'IBM Plex Mono', monospace; font-size: 9px; letter-spacing: .16em; color: rgba(245,241,234,.4);">VOO</div><div style="font-size: 14px; font-weight: 500; margin-top: 5px;">direto · 10h30</div></div>
+        <div><div style="font-family: 'IBM Plex Mono', monospace; font-size: 9px; letter-spacing: .16em; color: rgba(245,241,234,.4);">PASSAGEIROS</div><div style="font-size: 14px; font-weight: 500; margin-top: 5px;">2</div></div>
+      </div>
+      <button onClick="{{ board }}" style="width: 100%; margin-top: 22px; min-height: 52px; border: none; border-radius: 12px; background: #FF5B2E; color: #0B0D0F; font-size: 15px; font-weight: 600; letter-spacing: .02em; cursor: pointer;" style-hover="background: #F5F1EA;">
+        <span ref="{{ setBoardLabel }}">Embarcar</span>
+      </button>
+      <div ref="{{ setBoardStamp }}" style="margin-top: 14px; padding: 9px 12px; border: 1.5px solid rgba(255,91,46,.8); border-radius: 6px; text-align: center; font-family: 'IBM Plex Mono', monospace; font-size: 10px; letter-spacing: .2em; color: #FF5B2E; opacity: 0; transform: rotate(-7deg) scale(.9); transform-origin: center; transition: opacity .45s ease, transform .45s cubic-bezier(.2,1.4,.4,1);">SOFIA + JOÃO · OPO 13:55 · 03 MAR 2027</div>
+      <div style="font-family: 'IBM Plex Mono', monospace; font-size: 9px; letter-spacing: .12em; color: rgba(245,241,234,.32); text-align: center; margin-top: 12px;">SEM COMPROMISSO. É SÓ UM BOTÃO.</div>
+    </div>
+  </section>
+
+  <button onClick="{{ toggleSound }}" ref="{{ setSoundBtn }}" title="Mas Que Nada — versão Rio" style="position: fixed; right: 16px; bottom: 16px; z-index: 40; display: flex; align-items: center; gap: 9px; min-height: 44px; padding: 0 16px; border-radius: 100px; border: 1px solid rgba(245,241,234,.2); background: rgba(11,13,15,.72); backdrop-filter: blur(10px); color: rgba(245,241,234,.8); font-family: 'IBM Plex Mono', monospace; font-size: 10px; letter-spacing: .18em; cursor: pointer;" style-hover="border-color: #FF5B2E; color: #FF5B2E;">
+    <span ref="{{ setSoundDot }}" style="width: 7px; height: 7px; border-radius: 50%; background: rgba(245,241,234,.35);"></span>
+    <span ref="{{ setSoundLabel }}">SAMBA</span>
+  </button>
+
+  <section ref="{{ setMapSec }}" style="position: relative; padding: 90px clamp(22px, 6vw, 84px) 100px; background: #0B0D0F;">
+    <div style="font-family: 'IBM Plex Mono', monospace; font-size: 10px; letter-spacing: .26em; color: rgba(245,241,234,.4);">A DISTÂNCIA TODA</div>
+    <h2 style="font-weight: 600; font-size: clamp(28px, 5vw, 48px); line-height: 1.05; letter-spacing: -.03em; margin: 14px 0 8px; max-width: 32ch; text-wrap: balance;">São sete mil e trezentos quilómetros. Uma tarde.</h2>
+    <p style="font-size: clamp(16px, 1.5vw, 19px); line-height: 1.55; color: rgba(245,241,234,.7); margin: 0 0 26px; max-width: 56ch; text-wrap: pretty;">Continua a descer e vê a linha a ser feita.</p>
+    <div style="position: relative; width: 100%; aspect-ratio: 16 / 10; max-height: 62svh; border-radius: 18px; overflow: hidden; border: 1px solid rgba(245,241,234,.1); background: radial-gradient(120% 90% at 50% 40%, #12171C, #0B0D0F 76%);">
+      <iframe ref="{{ setMapFrame }}" src="rota-mapa.html" title="Porto → Rio de Janeiro" onLoad="{{ mapLoaded }}" style="position: absolute; inset: 0; width: 100%; height: 100%; border: 0;"></iframe>
+    </div>
+  </section>
+
+  <section ref="{{ setFlight }}" style="position: relative; height: 320svh; background: linear-gradient(#0B0D0F, #12212B 38%, #2A2A2E 66%, #C9A98A 88%, #E9D3B4 100%);">
+    <div style="position: sticky; top: 0; height: 100svh; overflow: hidden; display: flex; flex-direction: column; justify-content: center; padding: 0 clamp(22px, 6vw, 84px);">
+      <div data-depth="0.5" style="position: absolute; inset: -20% -10%; background: radial-gradient(60% 40% at 30% 30%, rgba(245,241,234,.10), transparent 70%), radial-gradient(50% 35% at 75% 60%, rgba(245,241,234,.07), transparent 70%); pointer-events: none;"></div>
+      <div data-depth="0.7" style="position: absolute; left: -25%; right: -25%; top: 34%; height: 26svh; background: radial-gradient(50% 50% at 30% 50%, rgba(245,241,234,.14), transparent 70%), radial-gradient(45% 50% at 72% 40%, rgba(245,241,234,.10), transparent 70%); filter: blur(14px); animation: drift 26s ease-in-out infinite alternate; pointer-events: none;"></div>
+      <div data-depth="0.35" style="position: absolute; left: -20%; right: -20%; bottom: 22svh; height: 20svh; background: radial-gradient(60% 50% at 60% 60%, rgba(245,241,234,.12), transparent 70%); filter: blur(18px); animation: drift 38s ease-in-out infinite alternate-reverse; pointer-events: none;"></div>
+      <div ref="{{ setSun }}" style="position: absolute; left: -30%; right: -30%; bottom: -24svh; height: 62svh; border-radius: 50%; background: radial-gradient(55% 55% at 50% 55%, rgba(255,198,122,.95), rgba(255,132,64,.42) 42%, rgba(255,91,46,.12) 66%, transparent 78%); filter: blur(6px); opacity: 0; pointer-events: none;"></div>
+      <div style="position: relative; width: 100%; max-width: 720px;">
+        <div style="font-family: 'IBM Plex Mono', monospace; font-size: 10px; letter-spacing: .26em; color: rgba(245,241,234,.5);">02 · ATLÂNTICO</div>
+        <div ref="{{ setClock }}" style="font-weight: 800; font-size: clamp(54px, 12vw, 96px); letter-spacing: -.05em; line-height: 1; margin: 16px 0 4px; font-variant-numeric: tabular-nums;">09:47</div>
+        <div style="font-family: 'IBM Plex Mono', monospace; font-size: 10px; letter-spacing: .2em; color: rgba(245,241,234,.55);">TEMPO DE VOO ESTIMADO</div>
+        <div style="position: relative; margin: 52px 0 0; width: 100%;">
+          <div style="height: 1px; background: repeating-linear-gradient(90deg, rgba(245,241,234,.35) 0 5px, transparent 5px 10px);"></div>
+          <div ref="{{ setTrail }}" style="position: absolute; top: 0; left: 0; width: 0; height: 1px; background: linear-gradient(90deg, rgba(255,91,46,0), #FF5B2E);"></div>
+          <div ref="{{ setPlane }}" style="position: absolute; top: -10px; left: 0; font-size: 18px; line-height: 1; color: #FF5B2E; transform: translateX(-50%); will-change: left;">✈</div>
+          <div style="display: flex; justify-content: space-between; margin-top: 16px; font-family: 'IBM Plex Mono', monospace; font-size: 10px; letter-spacing: .16em; color: rgba(245,241,234,.5);"><span>PORTO</span><span ref="{{ setDist }}">7 350 km</span><span>RIO</span></div>
+        </div>
+        <p style="max-width: 46ch; margin: 44px 0 0; font-size: clamp(16px, 1.5vw, 19px); line-height: 1.55; text-wrap: pretty; color: rgba(245,241,234,.8);">Dormes duas horas e acordas com a janela laranja.</p>
+      </div>
+    </div>
+  </section>
+
+  <section style="position: relative; height: 118svh; overflow: hidden; display: flex; flex-direction: column; justify-content: center; padding: 0 clamp(22px, 6vw, 84px) 34svh; background: linear-gradient(#E9D3B4 0, #DCC7A6 12%, #6E6E74 30%, #1B2028 52%, #0B0D0F 78%);">
+    <div data-depth="0.3" style="position: absolute; inset: -10%; background-image: url(img/rio-baia.jpg); background-size: cover; background-position: center; -webkit-mask-image: linear-gradient(180deg, transparent 0, rgba(0,0,0,.10) 14%, rgba(0,0,0,.45) 28%, rgba(0,0,0,.85) 44%, #000 58%, #000 68%, rgba(0,0,0,.35) 80%, transparent 88%); mask-image: linear-gradient(180deg, transparent 0, rgba(0,0,0,.10) 14%, rgba(0,0,0,.45) 28%, rgba(0,0,0,.85) 44%, #000 58%, #000 68%, rgba(0,0,0,.35) 80%, transparent 88%);"></div>
+    <div style="position: absolute; inset: 0; background: linear-gradient(180deg, rgba(233,211,180,.55) 0, rgba(200,178,150,.18) 16%, rgba(11,13,15,.06) 38%, rgba(11,13,15,.70) 76%, #0B0D0F 100%);"></div>
+    <div data-depth="0.55" style="position: absolute; left: auto; right: 26%; bottom: 17svh; z-index: 1; height: min(13svh, 17vw); aspect-ratio: 519 / 190; background: url(img/pao-silhueta.png) right bottom / contain no-repeat; filter: blur(7px) brightness(1.7) saturate(.35); opacity: .18; pointer-events: none;"></div>
+    <div data-depth="0.08" style="position: relative; z-index: 2;">
+      <div style="font-family: 'IBM Plex Mono', monospace; font-size: 10px; letter-spacing: .26em; color: rgba(245,241,234,.7);">03 · CHEGADA · 21:25</div>
+      <h2 style="font-weight: 800; font-size: clamp(40px, 10vw, 88px); line-height: .9; letter-spacing: -.045em; margin: 14px 0 0; text-transform: uppercase;">Rio de<br />Janeiro</h2>
+      <p style="max-width: 48ch; margin: 18px 0 0; font-size: clamp(16px, 1.5vw, 19px); line-height: 1.55; text-wrap: pretty; color: rgba(245,241,234,.88);">Sais do aeroporto e sentes primeiro o calor. Depois a música, em todo o lado.</p>
+    </div>
+    <div data-depth="-0.2" role="img" aria-label="Pão de Açúcar" style="position: absolute; left: auto; right: -8%; bottom: -1svh; z-index: 3; height: min(28svh, 36vw); aspect-ratio: 519 / 190; background: url(img/pao-silhueta.png) right bottom / contain no-repeat; pointer-events: none;"></div>
+  </section>
+
+  <div style="overflow: hidden; padding: 20px 0; background: linear-gradient(90deg, #0B0D0F, rgba(255,91,46,.06), #0B0D0F); -webkit-mask-image: linear-gradient(90deg, transparent, #000 12%, #000 88%, transparent); mask-image: linear-gradient(90deg, transparent, #000 12%, #000 88%, transparent);">
+    <div ref="{{ setMarquee }}" style="display: flex; gap: 28px; white-space: nowrap; will-change: transform;">
+      <span style="font-family: 'IBM Plex Mono', monospace; font-size: 12px; letter-spacing: .22em; color: rgba(245,241,234,.5);">PORTO → RIO DE JANEIRO</span>
+      <span style="font-family: 'IBM Plex Mono', monospace; font-size: 12px; letter-spacing: .22em; color: #FF5B2E;">·</span>
+      <span style="font-family: 'IBM Plex Mono', monospace; font-size: 12px; letter-spacing: .22em; color: rgba(245,241,234,.5);">BÚZIOS</span>
+      <span style="font-family: 'IBM Plex Mono', monospace; font-size: 12px; letter-spacing: .22em; color: #FF5B2E;">·</span>
+      <span style="font-family: 'IBM Plex Mono', monospace; font-size: 12px; letter-spacing: .22em; color: rgba(245,241,234,.5);">PARATY</span>
+      <span style="font-family: 'IBM Plex Mono', monospace; font-size: 12px; letter-spacing: .22em; color: #FF5B2E;">·</span>
+      <span style="font-family: 'IBM Plex Mono', monospace; font-size: 12px; letter-spacing: .22em; color: rgba(245,241,234,.5);">ILHA GRANDE</span>
+      <span style="font-family: 'IBM Plex Mono', monospace; font-size: 12px; letter-spacing: .22em; color: #FF5B2E;">·</span>
+    </div>
+  </div>
+
+  <section style="position: relative; padding: 76px clamp(22px, 6vw, 84px) 10px; background: #0B0D0F;">
+    <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(190px, 1fr)); gap: 40px 24px; max-width: 900px;">
+      <sc-for list="{{ figures }}" as="f" hint-placeholder-count="4">
+        <div data-count="{{ f.value }}" data-unit="{{ f.unit }}">
+          <div style="font-weight: 800; font-size: clamp(30px, 8vw, 48px); letter-spacing: -.045em; line-height: .92; white-space: nowrap; font-variant-numeric: tabular-nums;">{{ f.display }}</div>
+          <div style="font-family: 'IBM Plex Mono', monospace; font-size: 10px; letter-spacing: .16em; color: rgba(245,241,234,.45); margin-top: 10px; line-height: 1.7;">{{ f.label }}</div>
+        </div>
+      </sc-for>
+    </div>
+  </section>
+
+  <section style="position: relative; padding: 90px clamp(22px, 6vw, 84px) 30px; background: #0B0D0F;">
+    <div style="font-family: 'IBM Plex Mono', monospace; font-size: 10px; letter-spacing: .26em; color: rgba(245,241,234,.4);">04 · A TUA VEZ</div>
+    <h2 style="font-weight: 600; font-size: clamp(28px, 5vw, 48px); line-height: 1.05; letter-spacing: -.03em; margin: 14px 0 10px; max-width: 34ch; text-wrap: balance;">Como é que queres que sejam os dias?</h2>
+    <p style="font-size: 15px; line-height: 1.6; color: rgba(245,241,234,.6); margin: 0 0 24px;">Escolhe dois ou três. A viagem muda a partir daqui.</p>
+    <div ref="{{ setVibes }}" style="display: flex; flex-wrap: wrap; gap: 10px;">
+      <sc-for list="{{ vibes }}" as="v" hint-placeholder-count="6">
+        <button onClick="{{ v.pick }}" data-on="{{ v.on }}" style="min-height: 48px; padding: 0 18px; border-radius: 100px; border: 1px solid rgba(245,241,234,.22); background: transparent; color: #F5F1EA; font-size: 14px; font-weight: 500; cursor: pointer;">{{ v.label }}</button>
+      </sc-for>
+    </div>
+    <div ref="{{ setVibeEcho }}" style="margin-top: 22px; font-size: 15px; line-height: 1.6; color: #FF5B2E; min-height: 24px;"></div>
+  </section>
+
+  <section style="position: relative; height: 108svh; overflow: hidden; display: flex; align-items: center; padding: 0 clamp(22px, 6vw, 84px);">
+    <div data-depth="0.26" style="position: absolute; inset: -12%; background-image: url(img/ipanema.jpg); background-size: cover; background-position: center; -webkit-mask-image: linear-gradient(180deg, transparent 0 12%, rgba(0,0,0,.55) 28%, #000 42%, #000 68%, rgba(0,0,0,.4) 84%, transparent 94%); mask-image: linear-gradient(180deg, transparent 0 12%, rgba(0,0,0,.55) 28%, #000 42%, #000 68%, rgba(0,0,0,.4) 84%, transparent 94%);"></div>
+    <div style="position: absolute; inset: 0; background: linear-gradient(90deg, rgba(11,13,15,.88), rgba(11,13,15,.18) 78%), linear-gradient(180deg, #0B0D0F 0, transparent 22%, transparent 74%, #0B0D0F 100%);"></div>
+    <div data-depth="0.07" style="position: relative; width: 100%; max-width: min(56ch, 78%);">
+      <div style="font-family: 'IBM Plex Mono', monospace; font-size: 10px; letter-spacing: .22em; color: rgba(245,241,234,.65);">IPANEMA · 18:40</div>
+      <h3 style="font-weight: 700; font-size: clamp(32px, 5.4vw, 62px); line-height: 1; letter-spacing: -.035em; margin: 14px 0 18px; text-wrap: balance;">O sol põe-se e a praia aplaude.</h3>
+      <p style="font-size: clamp(16px, 1.5vw, 19px); line-height: 1.55; color: rgba(245,241,234,.82); margin: 0; max-width: 54ch; text-wrap: pretty;">Acontece todos os dias no Arpoador. Ninguém combina nada, e às sete da tarde está tudo virado para o mesmo lado.</p>
+    </div>
+  </section>
+
+  <section style="position: relative; padding: 84px 0 80px; background: #0B0D0F;">
+    <div style="display: flex; justify-content: space-between; align-items: baseline; padding: 0 clamp(22px, 6vw, 84px) 20px;">
+      <div style="font-family: 'IBM Plex Mono', monospace; font-size: 10px; letter-spacing: .26em; color: rgba(245,241,234,.4);">GALERIA · ARRASTA</div>
+      <div ref="{{ setGalCount }}" style="font-family: 'IBM Plex Mono', monospace; font-size: 10px; letter-spacing: .16em; color: rgba(245,241,234,.4);">01 / 05</div>
+    </div>
+    <div ref="{{ setGallery }}" style="display: flex; gap: 12px; overflow-x: auto; scroll-snap-type: x mandatory; padding: 0 clamp(22px, 6vw, 84px) 18px; scrollbar-width: none; cursor: grab; -webkit-overflow-scrolling: touch;">
+      <figure style="flex: 0 0 78%; margin: 0; scroll-snap-align: center;">
+        <div style="height: 62svh; border-radius: 18px; -webkit-mask-image: linear-gradient(180deg, transparent 0, #000 8%, #000 92%, transparent 100%); mask-image: linear-gradient(180deg, transparent 0, #000 8%, #000 92%, transparent 100%); background: #0B0D0F url(img/cristo-baia.jpg) center/cover;"></div>
+        <figcaption style="font-family: 'IBM Plex Mono', monospace; font-size: 10px; letter-spacing: .16em; color: rgba(245,241,234,.45); margin-top: 12px;">01 · A BAÍA DE GUANABARA VISTA DO CORCOVADO</figcaption>
+      </figure>
+      <figure style="flex: 0 0 78%; margin: 0; scroll-snap-align: center;">
+        <div style="height: 62svh; border-radius: 18px; -webkit-mask-image: linear-gradient(180deg, transparent 0, #000 8%, #000 92%, transparent 100%); mask-image: linear-gradient(180deg, transparent 0, #000 8%, #000 92%, transparent 100%); background: #0B0D0F url(img/ipanema.jpg) center/cover;"></div>
+        <figcaption style="font-family: 'IBM Plex Mono', monospace; font-size: 10px; letter-spacing: .16em; color: rgba(245,241,234,.45); margin-top: 12px;">02 · IPANEMA, DOIS IRMÃOS, FIM DE TARDE</figcaption>
+      </figure>
+      <figure style="flex: 0 0 78%; margin: 0; scroll-snap-align: center;">
+        <div style="height: 62svh; border-radius: 18px; -webkit-mask-image: linear-gradient(180deg, transparent 0, #000 8%, #000 92%, transparent 100%); mask-image: linear-gradient(180deg, transparent 0, #000 8%, #000 92%, transparent 100%); background: #0B0D0F url(img/paodeacucar.jpg) center/cover;"></div>
+        <figcaption style="font-family: 'IBM Plex Mono', monospace; font-size: 10px; letter-spacing: .16em; color: rgba(245,241,234,.45); margin-top: 12px;">03 · PÃO DE AÇÚCAR AO CONTRALUZ</figcaption>
+      </figure>
+      <figure style="flex: 0 0 78%; margin: 0; scroll-snap-align: center;">
+        <div style="height: 62svh; border-radius: 18px; -webkit-mask-image: linear-gradient(180deg, transparent 0, #000 8%, #000 92%, transparent 100%); mask-image: linear-gradient(180deg, transparent 0, #000 8%, #000 92%, transparent 100%); background: #0B0D0F url(img/rio-baia.jpg) center/cover;"></div>
+        <figcaption style="font-family: 'IBM Plex Mono', monospace; font-size: 10px; letter-spacing: .16em; color: rgba(245,241,234,.45); margin-top: 12px;">04 · BOTAFOGO, A CIDADE A ACORDAR</figcaption>
+      </figure>
+      <figure style="flex: 0 0 78%; margin: 0; scroll-snap-align: center;">
+        <div style="height: 62svh; border-radius: 18px; -webkit-mask-image: linear-gradient(180deg, transparent 0, #000 8%, #000 92%, transparent 100%); mask-image: linear-gradient(180deg, transparent 0, #000 8%, #000 92%, transparent 100%); background: #0B0D0F url(img/cristo-nuvens.png) center/cover;"></div>
+        <figcaption style="font-family: 'IBM Plex Mono', monospace; font-size: 10px; letter-spacing: .16em; color: rgba(245,241,234,.45); margin-top: 12px;">05 · O CRISTO ACIMA DAS NUVENS</figcaption>
+      </figure>
+    </div>
+  </section>
+
+  <section style="position: relative; padding: 90px clamp(22px, 6vw, 84px); background: radial-gradient(120% 80% at 50% 50%, #13181D, #0B0D0F 70%);">
+    <div style="font-family: 'IBM Plex Mono', monospace; font-size: 10px; letter-spacing: .26em; color: rgba(245,241,234,.4);">05 · UMA DECISÃO</div>
+    <h2 style="font-weight: 600; font-size: clamp(28px, 5vw, 48px); line-height: 1.05; letter-spacing: -.03em; margin: 14px 0 8px; max-width: 32ch; text-wrap: balance;">Helicóptero ao pôr do sol?</h2>
+    <p style="font-size: 15px; line-height: 1.6; color: rgba(245,241,234,.6); margin: 0 0 22px;">Vinte minutos por cima da baía, à hora dourada. Ou o mesmo pôr do sol visto do Mirante Dona Marta, de graça.</p>
+    <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(180px, 1fr)); gap: 10px; max-width: 560px;">
+      <button ref="{{ setHeliYes }}" onClick="{{ heliYes }}" style="min-height: 88px; border-radius: 14px; border: 1px solid rgba(245,241,234,.22); background: transparent; color: #F5F1EA; font-size: 15px; font-weight: 600; cursor: pointer; padding: 14px; text-align: left;">Sim, vamos<br /><span style="font-family: 'IBM Plex Mono', monospace; font-size: 10px; font-weight: 400; letter-spacing: .12em; color: rgba(245,241,234,.5);">+ CUSTO A CONFIRMAR</span></button>
+      <button ref="{{ setHeliNo }}" onClick="{{ heliNo }}" style="min-height: 88px; border-radius: 14px; border: 1px solid rgba(245,241,234,.22); background: transparent; color: #F5F1EA; font-size: 15px; font-weight: 600; cursor: pointer; padding: 14px; text-align: left;">Do miradouro<br /><span style="font-family: 'IBM Plex Mono', monospace; font-size: 10px; font-weight: 400; letter-spacing: .12em; color: rgba(245,241,234,.5);">SEM CUSTO</span></button>
+    </div>
+    <div ref="{{ setHeliEcho }}" style="margin-top: 20px; font-size: 15px; line-height: 1.65; color: rgba(245,241,234,.75); min-height: 26px;"></div>
+  </section>
+
+  <section style="position: relative; height: 108svh; overflow: hidden; display: flex; align-items: flex-end; padding: 0 clamp(22px, 6vw, 84px) 60px;">
+    <div data-depth="0.26" style="position: absolute; inset: -12%; background-image: url(img/paodeacucar.jpg); background-size: cover; background-position: center; -webkit-mask-image: linear-gradient(180deg, transparent 0 12%, rgba(0,0,0,.55) 28%, #000 42%, #000 66%, rgba(0,0,0,.4) 84%, transparent 94%); mask-image: linear-gradient(180deg, transparent 0 12%, rgba(0,0,0,.55) 28%, #000 42%, #000 66%, rgba(0,0,0,.4) 84%, transparent 94%);"></div>
+    <div style="position: absolute; inset: 0; background: linear-gradient(180deg, #0B0D0F 0, rgba(11,13,15,.18) 26%, rgba(11,13,15,.78) 82%, #0B0D0F 100%);"></div>
+    <div data-depth="0.07" style="position: relative; width: 100%; max-width: min(56ch, 78%);">
+      <div style="font-family: 'IBM Plex Mono', monospace; font-size: 10px; letter-spacing: .22em; color: rgba(245,241,234,.65);">DEPOIS DO RIO · ESTRADA</div>
+      <h3 style="font-weight: 700; font-size: clamp(32px, 5.4vw, 62px); line-height: 1; letter-spacing: -.035em; margin: 14px 0 18px; text-wrap: balance;">Búzios, Paraty, e o mar nas curvas.</h3>
+      <p style="font-size: clamp(16px, 1.5vw, 19px); line-height: 1.55; color: rgba(245,241,234,.82); margin: 0; max-width: 54ch; text-wrap: pretty;">Duas horas e meia de carro até Búzios. Depois estrada outra vez, até uma vila de pedra com barcos.</p>
+    </div>
+  </section>
+
+  <section style="position: relative; padding: 90px clamp(22px, 6vw, 84px) 80px; background: radial-gradient(130% 80% at 50% 40%, #13181D, #0B0D0F 72%);">
+    <div style="font-family: 'IBM Plex Mono', monospace; font-size: 10px; letter-spacing: .26em; color: rgba(245,241,234,.4);">O QUE ESTÁS A PENSAR</div>
+    <h2 style="font-weight: 600; font-size: clamp(28px, 5vw, 48px); line-height: 1.05; letter-spacing: -.03em; margin: 14px 0 26px; max-width: 34ch; text-wrap: balance;">As perguntas todas, sem tratar-te por criança.</h2>
+    <div style="border-top: 1px solid rgba(245,241,234,.14); max-width: 820px;">
+      <sc-for list="{{ faqs }}" as="q" hint-placeholder-count="4">
+        <div style="border-bottom: 1px solid rgba(245,241,234,.14);">
+          <button onClick="{{ q.toggle }}" style="width: 100%; display: flex; align-items: flex-start; gap: 14px; min-height: 64px; padding: 18px 0; background: transparent; border: none; color: #F5F1EA; text-align: left; cursor: pointer;">
+            <span style="font-family: 'IBM Plex Mono', monospace; font-size: 10px; letter-spacing: .12em; color: #FF5B2E; padding-top: 4px;">{{ q.num }}</span>
+            <span style="flex: 1; font-size: 16px; font-weight: 500; line-height: 1.4;">{{ q.q }}</span>
+            <span style="font-size: 18px; color: rgba(245,241,234,.5); line-height: 1;">{{ q.sign }}</span>
+          </button>
+          <sc-if value="{{ q.open }}" hint-placeholder-val="{{ false }}">
+            <p style="margin: 0 0 20px; padding-left: 32px; font-size: 15px; line-height: 1.7; color: rgba(245,241,234,.72);">{{ q.a }}</p>
+          </sc-if>
+        </div>
+      </sc-for>
+    </div>
+  </section>
+
+  <section style="position: relative; padding: 90px clamp(22px, 6vw, 84px); background: #0B0D0F;">
+    <div style="font-family: 'IBM Plex Mono', monospace; font-size: 10px; letter-spacing: .26em; color: rgba(245,241,234,.4);">06 · ENTÃO</div>
+    <div style="font-family: 'IBM Plex Mono', monospace; font-size: 10px; letter-spacing: .14em; color: rgba(245,241,234,.34); margin-top: 10px;">DIAS DE CALENDÁRIO, DIA DE VOO INCLUÍDO — LOGO UMA NOITE MENOS.</div>
+    <h2 style="font-weight: 600; font-size: clamp(30px, 5.2vw, 52px); line-height: 1.05; letter-spacing: -.03em; margin: 14px 0 24px; max-width: 32ch; text-wrap: balance;">Quantos dias queremos, na verdade?</h2>
+    <div style="display: flex; flex-direction: column; gap: 10px; max-width: 560px;">
+      <sc-for list="{{ durations }}" as="d" hint-placeholder-count="4">
+        <button onClick="{{ d.pick }}" data-on="{{ d.on }}" style="display: flex; align-items: center; gap: 16px; min-height: 76px; padding: 16px 18px; border-radius: 14px; border: 1px solid rgba(245,241,234,.18); background: transparent; color: #F5F1EA; text-align: left; cursor: pointer;">
+          <span style="font-weight: 800; font-size: 28px; letter-spacing: -.03em; min-width: 52px;">{{ d.days }}</span>
+          <span style="flex: 1;">
+            <span style="display: block; font-size: 15px; font-weight: 600;">{{ d.title }}</span>
+            <span style="display: block; font-size: 13px; color: rgba(245,241,234,.55); margin-top: 3px;">{{ d.route }}</span>
+          </span>
+        </button>
+      </sc-for>
+    </div>
+    <div ref="{{ setPlan }}" style="max-width: 620px; margin-top: 26px; border-top: 1px solid rgba(245,241,234,.14); padding-top: 22px; opacity: .35;">
+      <div style="font-family: 'IBM Plex Mono', monospace; font-size: 10px; letter-spacing: .2em; color: rgba(245,241,234,.45);">O NOSSO PLANO</div>
+      <div ref="{{ setPlanBody }}" style="font-size: 16px; line-height: 1.7; margin-top: 12px; color: rgba(245,241,234,.85);">Escolhe um número acima.</div>
+      <div style="font-family: 'IBM Plex Mono', monospace; font-size: 10px; line-height: 1.7; letter-spacing: .1em; color: rgba(245,241,234,.38); margin-top: 16px;">MUDA O NÚMERO E MUDA TUDO O QUE VEM A SEGUIR — DESTINOS, DIAS E O PREÇO.</div>
+    </div>
+  </section>
+
+  <section style="position: relative; padding: 70px clamp(22px, 6vw, 84px) 90px; background: #0B0D0F;">
+    <div style="position: absolute; left: -20%; right: -20%; top: -34svh; height: 90svh; background: radial-gradient(50% 50% at 50% 50%, rgba(28,36,45,.85), rgba(22,28,35,.42) 45%, transparent 72%); pointer-events: none;"></div>
+    <div style="position: relative; font-family: 'IBM Plex Mono', monospace; font-size: 10px; letter-spacing: .26em; color: rgba(245,241,234,.4);">07 · O QUE FAZEMOS LÁ</div>
+    <h2 style="font-weight: 600; font-size: clamp(28px, 5vw, 48px); line-height: 1.05; letter-spacing: -.03em; margin: 14px 0 8px; max-width: 32ch; text-wrap: balance;">Toca no que te apetece. O resto fica de fora.</h2>
+    <p ref="{{ setActIntro }}" style="font-size: 15px; line-height: 1.6; color: rgba(245,241,234,.6); margin: 0 0 22px; max-width: 60ch; text-wrap: pretty;">Escolhe primeiro os dias acima — os destinos aparecem aqui.</p>
+    <sc-if value="{{ hasVariants }}" hint-placeholder-val="{{ false }}">
+      <div style="display: flex; flex-wrap: wrap; gap: 8px; margin: 0 0 30px;">
+        <sc-for list="{{ variants }}" as="v" hint-placeholder-count="2">
+          <button onClick="{{ v.pick }}" data-on="{{ v.on }}" style="min-height: 44px; padding: 0 16px; border-radius: 999px; border: 1px solid rgba(245,241,234,.2); background: transparent; color: #F5F1EA; font-size: 13px; font-weight: 500; cursor: pointer;">{{ v.label }}</button>
+        </sc-for>
+      </div>
+    </sc-if>
+    <div style="display: flex; flex-direction: column; gap: 44px;">
+      <sc-for list="{{ places }}" as="p" hint-placeholder-count="2">
+        <div>
+          <div style="display: flex; align-items: baseline; gap: 12px; padding-bottom: 14px; border-bottom: 1px solid rgba(245,241,234,.14);">
+            <h3 style="font-weight: 700; font-size: clamp(22px, 3.4vw, 32px); letter-spacing: -.03em; margin: 0;">{{ p.name }}</h3>
+            <span style="font-family: 'IBM Plex Mono', monospace; font-size: 10px; letter-spacing: .16em; color: #FF5B2E;">{{ p.nights }}</span>
+            <span style="flex: 1;"></span>
+            <span style="font-family: 'IBM Plex Mono', monospace; font-size: 10px; letter-spacing: .16em; color: rgba(245,241,234,.4);">{{ p.mood }}</span>
+          </div>
+          <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(240px, 1fr)); gap: 10px; margin-top: 14px;">
+            <sc-for list="{{ p.acts }}" as="a" hint-placeholder-count="4">
+              <button onClick="{{ a.pick }}" data-on="{{ a.on }}" style="display: flex; flex-direction: column; gap: 6px; min-height: 96px; padding: 16px; border-radius: 14px; border: 1px solid rgba(245,241,234,.18); background: transparent; color: #F5F1EA; text-align: left; cursor: pointer;">
+                <span style="display: flex; align-items: baseline; gap: 10px; width: 100%;">
+                  <span style="flex: 1; font-size: 15px; font-weight: 600; line-height: 1.3;">{{ a.label }}</span>
+                  <span style="font-family: 'IBM Plex Mono', monospace; font-size: 11px; letter-spacing: .04em;">{{ a.price }}</span>
+                </span>
+                <span style="font-size: 13px; line-height: 1.5; color: rgba(245,241,234,.6);">{{ a.note }}</span>
+                <span style="font-family: 'IBM Plex Mono', monospace; font-size: 9px; letter-spacing: .14em; color: rgba(245,241,234,.42);">{{ a.meta }}</span>
+              </button>
+            </sc-for>
+          </div>
+          <sc-if value="{{ p.hasMore }}" hint-placeholder-val="{{ false }}">
+            <button onClick="{{ p.toggleMore }}" style="display: flex; align-items: center; gap: 10px; margin-top: 12px; min-height: 44px; padding: 0 4px; background: transparent; border: none; color: #FF5B2E; font-family: 'IBM Plex Mono', monospace; font-size: 11px; letter-spacing: .18em; cursor: pointer;">{{ p.moreLabel }}</button>
+          </sc-if>
+        </div>
+      </sc-for>
+    </div>
+  </section>
+
+  <section style="position: relative; padding: 30px clamp(22px, 6vw, 84px) 90px; background: #0B0D0F;">
+    <div style="font-family: 'IBM Plex Mono', monospace; font-size: 10px; letter-spacing: .26em; color: rgba(245,241,234,.4);">08 · COMO CORREU</div>
+    <h2 style="font-weight: 600; font-size: clamp(28px, 5vw, 48px); line-height: 1.05; letter-spacing: -.03em; margin: 14px 0 8px; max-width: 32ch; text-wrap: balance;">O diário, escrito antes de acontecer.</h2>
+    <p style="font-size: clamp(16px, 1.5vw, 19px); line-height: 1.55; color: rgba(245,241,234,.68); margin: 0 0 34px; max-width: 56ch; text-wrap: pretty;">Isto muda com o que escolheste em cima. É a viagem que tu montaste, dia por dia.</p>
+    <div style="display: flex; flex-direction: column; max-width: 760px;">
+      <sc-for list="{{ diary }}" as="d" hint-placeholder-count="6">
+        <div style="display: grid; grid-template-columns: 74px 1fr; gap: 18px; padding: 20px 0; border-top: 1px solid rgba(245,241,234,.1);">
+          <div>
+            <div style="font-weight: 800; font-size: 26px; letter-spacing: -.03em; line-height: 1; color: #FF5B2E;">{{ d.n }}</div>
+            <div style="font-family: 'IBM Plex Mono', monospace; font-size: 9px; letter-spacing: .18em; color: rgba(245,241,234,.42); margin-top: 6px;">{{ d.date }}</div>
+          </div>
+          <div>
+            <div style="font-family: 'IBM Plex Mono', monospace; font-size: 10px; letter-spacing: .18em; color: rgba(245,241,234,.5);">{{ d.place }}</div>
+            <div style="font-size: clamp(16px, 1.4vw, 18px); line-height: 1.55; margin-top: 8px; color: rgba(245,241,234,.88); text-wrap: pretty;">{{ d.text }}</div>
+          </div>
+        </div>
+      </sc-for>
+    </div>
+  </section>
+
+  <section style="position: relative; padding: 20px clamp(22px, 6vw, 84px) 100px; background: #0B0D0F;">
+    <div style="font-family: 'IBM Plex Mono', monospace; font-size: 10px; letter-spacing: .26em; color: rgba(245,241,234,.4);">09 · ENTÃO… QUANTO É?</div>
+    <h2 ref="{{ setCostTitle }}" style="font-weight: 600; font-size: clamp(28px, 5vw, 48px); line-height: 1.05; letter-spacing: -.03em; margin: 14px 0 26px; max-width: 30ch; text-wrap: balance;">3 a 12 de março, por pessoa.</h2>
+    <div style="max-width: 760px;">
+      <sc-for list="{{ costRows }}" as="c" hint-placeholder-count="5">
+        <div style="border-bottom: 1px solid rgba(245,241,234,.12);">
+          <button onClick="{{ c.toggle }}" style="display: flex; align-items: baseline; gap: 14px; width: 100%; min-height: 64px; padding: 16px 0; background: transparent; border: none; color: #F5F1EA; text-align: left; cursor: pointer;">
+            <span style="flex: 1;">
+              <span style="display: block; font-size: 15px; font-weight: 500;">{{ c.label }}</span>
+              <span style="display: block; font-family: 'IBM Plex Mono', monospace; font-size: 10px; letter-spacing: .12em; color: rgba(245,241,234,.42); margin-top: 4px;">{{ c.note }}</span>
+            </span>
+            <span style="font-family: 'IBM Plex Mono', monospace; font-size: 15px; font-variant-numeric: tabular-nums; white-space: nowrap;">{{ c.value }}</span>
+            <span style="font-size: 17px; color: rgba(245,241,234,.45); line-height: 1;">{{ c.sign }}</span>
+          </button>
+          <sc-if value="{{ c.open }}" hint-placeholder-val="{{ false }}">
+            <ul style="margin: 0 0 20px; padding: 0 0 0 18px; list-style: none; display: flex; flex-direction: column; gap: 10px;">
+              <sc-for list="{{ c.details }}" as="d" hint-placeholder-count="3">
+                <li style="font-size: 15px; line-height: 1.6; color: rgba(245,241,234,.74); text-wrap: pretty; max-width: 66ch;">{{ d }}</li>
+              </sc-for>
+            </ul>
+          </sc-if>
+        </div>
+      </sc-for>
+      <div style="display: flex; align-items: flex-end; gap: 14px; padding: 26px 0 0;">
+        <span style="flex: 1; font-family: 'IBM Plex Mono', monospace; font-size: 10px; letter-spacing: .2em; color: rgba(245,241,234,.5);">TOTAL ESTIMADO<br />POR PESSOA</span>
+        <span ref="{{ setTotal }}" style="font-weight: 800; font-size: clamp(34px, 7vw, 60px); letter-spacing: -.04em; line-height: .9; white-space: nowrap; color: #FF5B2E; font-variant-numeric: tabular-nums;">—</span>
+      </div>
+      <a href="https://www.google.com/travel/flights?q=Flights%20from%20OPO%20to%20GIG%20on%202027-03-04%20through%202027-03-16" target="_blank" rel="noopener" style="display: flex; align-items: center; justify-content: space-between; gap: 14px; margin-top: 30px; min-height: 56px; padding: 0 20px; border-radius: 14px; border: 1px solid rgba(255,91,46,.5); color: #FF5B2E; font-size: 15px; font-weight: 600;" style-hover="background: rgba(255,91,46,.1);">
+        <span>Ver preços de voos agora</span>
+        <span style="font-family: 'IBM Plex Mono', monospace; font-size: 11px; letter-spacing: .14em;">OPO → GIG ↗</span>
+      </a>
+      <div style="font-family: 'IBM Plex Mono', monospace; font-size: 10px; line-height: 1.9; letter-spacing: .08em; color: rgba(245,241,234,.38); margin-top: 22px;">
+        VOO: PREÇO REAL VISTO NO ECRÃ DE PESQUISA — TAP DIRETO, 3 A 12 DE MARÇO, 789 € POR PESSOA.<br />
+        AUTOCARRO RIO → BÚZIOS: VIAÇÃO 1001, R$ 92 A 132.<br />
+        BILHETES: BONDINHO R$ 99 · CRISTO R$ 105 · HELICÓPTERO 15MIN R$ 549 (RIO2FLY).<br />
+        HOTÉIS 4 ESTRELAS: DIÁRIAS EM COPACABANA DESDE R$ 363–412 FORA DE ÉPOCA ALTA.<br />
+        VERIFICADO A 8 DE SETEMBRO DE 2026 · ESTIMATIVAS POR PESSOA, QUARTO DUPLO · NADA ESTÁ COMPRADO.
+      </div>
+    </div>
+  </section>
+
+  <section style="position: relative; min-height: 100svh; overflow: hidden; display: flex; flex-direction: column; justify-content: center; padding: 80px clamp(22px, 6vw, 84px);">
+    <div data-depth="0.2" style="position: absolute; inset: -10%; background-image: url(img/cristo-nuvens.png); background-size: cover; background-position: center; -webkit-mask-image: linear-gradient(180deg, transparent 0 12%, rgba(0,0,0,.5) 28%, #000 44%, #000 100%); mask-image: linear-gradient(180deg, transparent 0 12%, rgba(0,0,0,.5) 28%, #000 44%, #000 100%);"></div>
+    <div style="position: absolute; inset: 0; background: linear-gradient(180deg, #0B0D0F 0, rgba(11,13,15,.42) 30%, rgba(11,13,15,.86) 100%);"></div>
+    <div data-depth="0.06" style="position: relative;">
+      <h2 style="font-weight: 800; font-size: clamp(56px, 14vw, 132px); line-height: .88; letter-spacing: -.05em; margin: 0; text-transform: uppercase;">Vamos?</h2>
+      <p style="font-size: clamp(16px, 1.5vw, 19px); line-height: 1.55; color: rgba(245,241,234,.82); margin: 18px 0 0; max-width: 48ch; text-wrap: pretty;">Sim, eu sei. Sou maluca. Mas fiz as contas, li os horários dos autocarros e sei o preço do helicóptero. Isso já é praticamente maturidade.</p>
+      <div style="margin-top: 34px; padding: 22px; border-radius: 18px; border: 1px solid rgba(255,91,46,.28); background: rgba(255,91,46,.06); max-width: 480px;">
+        <div style="font-family: 'IBM Plex Mono', monospace; font-size: 10px; letter-spacing: .22em; color: rgba(245,241,234,.55);">3 DE MARÇO, 13:55 · PORTO</div>
+        <div ref="{{ setCount }}" style="display: flex; gap: 18px; margin-top: 14px; font-variant-numeric: tabular-nums;"></div>
+        <div style="font-family: 'IBM Plex Mono', monospace; font-size: 10px; letter-spacing: .18em; color: rgba(245,241,234,.45); margin-top: 12px;">É O QUE FALTA. NÃO SOU EU QUE FAÇO AS CONTAS, É O RELÓGIO.</div>
+      </div>
+      <div style="display: flex; flex-direction: column; gap: 10px; margin-top: 30px; max-width: 420px;">
+        <button onClick="{{ yes }}" style="min-height: 56px; border-radius: 14px; border: none; background: #FF5B2E; color: #0B0D0F; font-size: 16px; font-weight: 600; cursor: pointer;" style-hover="background: #F5F1EA;">Pronto, está bem. Vamos.</button>
+        <button onClick="{{ notYet }}" style="min-height: 56px; border-radius: 14px; border: 1px solid rgba(245,241,234,.3); background: rgba(11,13,15,.3); color: #F5F1EA; font-size: 16px; font-weight: 500; cursor: pointer;" style-hover="border-color: #F5F1EA;">Tu és maluca (mas continua a falar)</button>
+      </div>
+      <div ref="{{ setEnd }}" style="margin-top: 26px; min-height: 30px;"></div>
+      <sc-if value="{{ showReasons }}" hint-placeholder-val="{{ false }}">
+        <div style="margin-top: 8px;">
+          <div style="font-size: 15px; color: rgba(245,241,234,.8); margin-bottom: 12px;">O que falta?</div>
+          <div style="display: flex; flex-wrap: wrap; gap: 10px;">
+            <sc-for list="{{ reasons }}" as="r" hint-placeholder-count="5">
+              <button onClick="{{ r.pick }}" data-on="{{ r.on }}" style="min-height: 46px; padding: 0 16px; border-radius: 100px; border: 1px solid rgba(245,241,234,.24); background: transparent; color: #F5F1EA; font-size: 14px; cursor: pointer;">{{ r.label }}</button>
+            </sc-for>
+          </div>
+        </div>
+      </sc-if>
+      <div style="display: flex; flex-wrap: wrap; gap: 10px; margin-top: 30px;">
+        <button onClick="{{ shareWhats }}" style="min-height: 50px; padding: 0 22px; border-radius: 100px; border: none; background: #FF5B2E; color: #0B0D0F; font-family: 'IBM Plex Mono', monospace; font-size: 11px; letter-spacing: .16em; font-weight: 600; cursor: pointer;" style-hover="background: #FF7148;">MANDAR NO WHATSAPP</button>
+        <button onClick="{{ share }}" style="min-height: 50px; padding: 0 22px; border-radius: 100px; border: 1px solid rgba(245,241,234,.24); background: transparent; color: rgba(245,241,234,.85); font-family: 'IBM Plex Mono', monospace; font-size: 11px; letter-spacing: .16em; cursor: pointer;" style-hover="border-color: #FF5B2E; color: #FF5B2E;">COPIAR O PLANO</button>
+      </div>
+      <sc-if value="{{ shared }}" hint-placeholder-val="{{ false }}">
+        <div style="margin-top: 18px;">
+          <div style="font-family: 'IBM Plex Mono', monospace; font-size: 10px; letter-spacing: .16em; color: #FF5B2E;">{{ shareMsg }}</div>
+          <textarea ref="{{ setShareBox }}" readOnly="{{ true }}" defaultValue="{{ shareText }}" style="margin-top: 12px; width: 100%; max-width: 560px; min-height: 150px; padding: 14px; border-radius: 12px; border: 1px solid rgba(245,241,234,.18); background: rgba(245,241,234,.04); color: rgba(245,241,234,.8); font-family: 'IBM Plex Mono', monospace; font-size: 12px; line-height: 1.7; resize: vertical;"></textarea>
+        </div>
+      </sc-if>
+    </div>
+  </section>
+</div>
+
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props="{&quot;$preview&quot;:{&quot;width&quot;:420,&quot;height&quot;:900}}">
+class Component extends DCLogic {
+  state = { vibes: [], heli: null, days: 10, showReasons: false, reasons: [], shared: false, shareMsg: "", open: null, acts: [], openCost: null, variant: 0, moreOpen: [] };
+
+  FIGURES = [
+    { value: 7350, unit: " km", display: "7 350 km", label: "PORTO → RIO,\nEM LINHA RETA" },
+    { value: 0, display: "10h30", label: "DE VOO DIRETO\nPORTO → RIO" },
+    { value: 29, unit: "°", display: "29°", label: "MÁXIMA MÉDIA EM MARÇO\nNO RIO" },
+    { value: 3, unit: "", display: "3", label: "SÍTIOS: RIO, BÚZIOS\nE PARATY" }
+  ];
+
+  PLACES = {
+    rio: { name: "Rio de Janeiro", mood: "CIDADE · PRAIA · ÍCONES", acts: [
+      { id: "cristo", label: "Cristo Redentor", price: "€ 17", eur: 17, note: "Van ou trem do Corcovado a subir pela Tijuca. Cedo, antes das filas.", meta: "3H · R$ 105 · BILHETE ONLINE" },
+      { id: "bondinho", label: "Bondinho do Pão de Açúcar", price: "€ 16", eur: 16, note: "Duas cabines até ao cimo. A vista é melhor que a do Cristo, e com menos nuvem.", meta: "3H · R$ 99 · FIM DE TARDE" },
+      { id: "arpoador", label: "Pôr do sol no Arpoador", price: "grátis", eur: 0, note: "A pedra enche-se e a praia aplaude o sol. Todos os dias.", meta: "1H · 18H30 · A PÉ DE IPANEMA" },
+      { id: "marta", label: "Mirante Dona Marta", price: "€ 8", eur: 8, note: "A cidade toda de cima, sem bilhete. Só o Uber a subir.", meta: "2H · UBER · AO ANOITECER" },
+      { id: "santa", label: "Santa Teresa e jantar na Lapa", price: "€ 30", eur: 30, note: "Casario, elétrico, e um jantar com música ao lado.", meta: "4H · NOITE · RESERVA" },
+      { id: "parapente", label: "Parapente da Pedra Bonita", price: "≈ € 75", eur: 75, note: "Salto duplo com instrutor, aterragem na praia de São Conrado.", meta: "3H · ESTIMATIVA · OPERADOR A CONFIRMAR" },
+      { id: "heli", label: "Helicóptero sobre a baía", price: "≈ € 90", eur: 90, note: "Quinze minutos a passar pelo Pão de Açúcar e pelo Cristo, em voo partilhado. O mais barato que encontrei são R$ 549 por pessoa; a partir daí sobe muito.", meta: "15MIN · R$ 549 RIO2FLY · RIOCOPTER DESDE R$ 650 · FALCON R$ 1 350" },
+      { id: "rocinha", label: "Subir a Rocinha", price: "≈ € 25", eur: 25, note: "Visita guiada por quem lá vive, de mota até ao alto e a descer a pé. Com guia local, não sozinhas.", meta: "3H · GUIA LOCAL · ESTIMATIVA" },
+      { id: "telegrafo", label: "Pedra do Telégrafo", price: "≈ € 12", eur: 12, note: "A fotografia pendurada no abismo que não é abismo nenhum. Trilho de 40 minutos.", meta: "4H · TRANSPORTE · MANHÃ CEDO" },
+      { id: "selaron", label: "Escadaria Selarón", price: "grátis", eur: 0, note: "Duzentos e quinze degraus de azulejo, incluindo alguns de Portugal.", meta: "1H · LAPA · A PÉ" },
+      { id: "urca", label: "Mureta da Urca ao fim do dia", price: "≈ € 10", eur: 10, note: "Sentar no muro com uma cerveja e um pastel, de frente para a baía. É o que os cariocas fazem.", meta: "2H · 17H · SEM RESERVA" },
+      { id: "vista", label: "Vista Chinesa", price: "≈ € 10", eur: 10, note: "Pavilhão chinês dentro da floresta da Tijuca, com a cidade inteira em frente.", meta: "2H · UBER · MANHÃ" },
+      { id: "lagoa", label: "Pedalinho na Lagoa", price: "≈ € 8", eur: 8, note: "Cisne de plástico na Lagoa Rodrigo de Freitas com o Cristo a olhar. Ridículo e obrigatório.", meta: "1H · TARDE" }
+    ]},
+    buzios: { name: "Búzios", mood: "MAR · BARCO · NOITE", lunch: "peixe grelhado num quiosque da Ferradura, em Búzios", acts: [
+      { id: "barco", label: "Dia de barco pelas praias", price: "≈ € 35", eur: 35, note: "Doze praias, paragens para nadar, almoço a bordo.", meta: "5H · ESTIMATIVA" },
+      { id: "geriba", label: "Manhã na Geribá", price: "grátis", eur: 0, note: "A praia onde se fica horas sem fazer nada.", meta: "MANHÃ · A PÉ" },
+      { id: "pedras", label: "Rua das Pedras e Orla Bardot", price: "≈ € 30", eur: 30, note: "Jantar à beira de água e a rua a encher depois.", meta: "NOITE · ESTIMATIVA" },
+      { id: "sup", label: "Stand-up paddle ao amanhecer", price: "≈ € 15", eur: 15, note: "Água lisa, ninguém na praia.", meta: "1H30 · ESTIMATIVA" },
+      { id: "buggy", label: "Buggy pelas praias do fim", price: "≈ € 30", eur: 30, note: "Estradas de terra até Tucuns e José Gonçalves, as que ficam vazias.", meta: "4H · ESTIMATIVA · CONDUTOR" },
+      { id: "azeda", label: "Praia Azeda a pé pela pedra", price: "grátis", eur: 0, note: "Trilho curto de dez minutos desde a Ossos. Água transparente e sem estrada.", meta: "MEIA-MANHÃ · A PÉ" },
+      { id: "mergulho", label: "Mergulho na Ilha Âncora", price: "≈ € 55", eur: 55, note: "Batismo de mergulho com garrafa, para quem nunca fez. Instrutor sempre ao lado.", meta: "3H · ESTIMATIVA · SEM EXPERIÊNCIA" },
+      { id: "brigitte", label: "Estátua da Brigitte Bardot", price: "grátis", eur: 0, note: "A fotografia obrigatória, sentadas no banco ao lado dela na Orla Bardot.", meta: "20MIN · A PÉ" },
+      { id: "caravela", label: "Jantar de frente para o mar na Orla", price: "≈ € 25", eur: 25, note: "Mesa na madeira à beira de água, peixe e um copo de vinho branco.", meta: "NOITE · RESERVA · SE NÃO USARES A MEIA PENSÃO" },
+      { id: "kayak", label: "Kayak transparente na Ferradurinha", price: "≈ € 12", eur: 12, note: "Fundo de vidro, água rasa e peixe a passar por baixo.", meta: "1H · ESTIMATIVA" }
+    ]},
+    paraty: { name: "Paraty e Trindade", mood: "PEDRA · MATA · DEVAGAR", lunch: "prato do dia numa casa do centro histórico de Paraty", acts: [
+      { id: "centro", label: "Centro histórico a pé", price: "grátis", eur: 0, note: "Ruas de pedra irregular, casas brancas, portas coloridas.", meta: "2H · FIM DE TARDE" },
+      { id: "escuna", label: "Escuna pelas ilhas", price: "≈ € 30", eur: 30, note: "Paragens em enseadas de água verde.", meta: "5H · ESTIMATIVA" },
+      { id: "trindade", label: "Praias de Trindade", price: "≈ € 10", eur: 10, note: "Piscina natural entre pedras. Vila pequena e descalça.", meta: "DIA · TRANSPORTE LOCAL" },
+      { id: "cachoeira", label: "Cachoeiras e alambique", price: "≈ € 35", eur: 35, note: "Mata atlântica, água fria e cachaça no fim.", meta: "5H · ESTIMATIVA · GUIA" },
+      { id: "sono", label: "Praia do Sono", price: "≈ € 20", eur: 20, note: "Barco ou trilho de uma hora. É a mais bonita e a mais difícil.", meta: "DIA · TRILHO MARCADO" },
+      { id: "saco", label: "Saco do Mamanguá", price: "≈ € 30", eur: 30, note: "O único fiorde tropical do Brasil. Barco por dentro de um braço de mar estreito.", meta: "5H · ESTIMATIVA" },
+      { id: "jipe", label: "Jipe pela estrada da Cunha", price: "≈ € 35", eur: 35, note: "Serra acima entre alambiques e cachoeiras, de jipe aberto.", meta: "5H · ESTIMATIVA · GUIA" },
+      { id: "kayakpar", label: "Kayak ao pôr do sol na baía", price: "≈ € 18", eur: 18, note: "Sair do cais quando o sol desce e a água fica cor de laranja.", meta: "2H · ESTIMATIVA" },
+      { id: "casarao", label: "Jantar num casarão colonial", price: "≈ € 30", eur: 30, note: "Comida caiçara dentro de uma casa do século XVIII, com pátio.", meta: "NOITE · RESERVA" },
+      { id: "bioluz", label: "Barco noturno com bioluminescência", price: "≈ € 25", eur: 25, note: "Em noites escuras a água acende-se ao mexer. Depende da lua e da época.", meta: "2H · A CONFIRMAR NA DATA" }
+    ]},
+    ilha: { name: "Ilha Grande", mood: "BARCO · FLORESTA · SEM CARROS", lunch: "moqueca num restaurante de pés na areia na Vila do Abraão", acts: [
+      { id: "lopes", label: "Lopes Mendes", price: "≈ € 20", eur: 20, note: "Barco e trilho até areia branca sem uma única construção.", meta: "DIA · BARCO + TRILHO" },
+      { id: "volta", label: "Volta à ilha de escuna", price: "≈ € 35", eur: 35, note: "As enseadas todas num dia.", meta: "6H · ESTIMATIVA" },
+      { id: "abraao", label: "Noite na Vila do Abraão", price: "grátis", eur: 0, note: "Não há carros. Jantar e voltar a pé pela areia.", meta: "NOITE" },
+      { id: "snorkel", label: "Snorkel na Lagoa Azul", price: "≈ € 22", eur: 22, note: "Piscina natural entre ilhas, com peixe a comer da mão.", meta: "4H · ESTIMATIVA" },
+      { id: "picodope", label: "Trilho do Pico do Papagaio", price: "≈ € 30", eur: 30, note: "Saída às três da manhã para ver o nascer do sol do cimo. Cinco horas a subir.", meta: "8H · GUIA OBRIGATÓRIO · DIFÍCIL" },
+      { id: "dopidoll", label: "Cachoeira da Feiticeira", price: "≈ € 15", eur: 15, note: "Barco e trilho curto até uma queda de água na mata.", meta: "3H · ESTIMATIVA" }
+    ]}
+  };
+
+  // dias de calendário = noites + 1 (o dia de voo)
+  ROUTES = {
+    7: [
+      { label: "Rio e Búzios", legs: [["rio", 3], ["buzios", 3]] },
+      { label: "Só Rio, sem pressa", legs: [["rio", 6]] }
+    ],
+    10: [
+      { label: "Rio e Búzios, com calma", legs: [["rio", 5], ["buzios", 4]] },
+      { label: "Rio, Búzios e Paraty", legs: [["rio", 4], ["buzios", 2], ["paraty", 3]] }
+    ],
+    12: [
+      { label: "Rio, Búzios e Paraty", legs: [["rio", 4], ["buzios", 3], ["paraty", 4]] },
+      { label: "Rio e Búzios só", legs: [["rio", 6], ["buzios", 5]] },
+      { label: "Rio, Paraty e Ilha Grande", legs: [["rio", 4], ["paraty", 4], ["ilha", 3]] }
+    ],
+    14: [
+      { label: "Os quatro sítios", legs: [["rio", 4], ["buzios", 3], ["paraty", 3], ["ilha", 3]] },
+      { label: "Rio, Búzios e Paraty, devagar", legs: [["rio", 5], ["buzios", 4], ["paraty", 4]] }
+    ]
+  };
+
+  HOPS = {
+    "rio>buzios": { eur: 18, text: "Rio → Búzios, autocarro 1001: R$ 92 a 132 (≈ 18 €), 3h10 a 3h50." },
+    "buzios>rio": { eur: 18, text: "Búzios → Rio, autocarro 1001: R$ 92 a 132 (≈ 18 €), 3h10 a 3h50." },
+    "rio>paraty": { eur: 20, text: "Rio → Paraty, autocarro Costa Verde: ≈ 20 €, 4h30 pela estrada da costa." },
+    "buzios>paraty": { eur: 35, text: "Búzios → Paraty: sem ligação direta, faz-se por transfer ou via Rio — ≈ 35 €, cerca de 6 horas." },
+    "paraty>ilha": { eur: 25, text: "Paraty → Angra dos Reis e barco para a Ilha Grande: ≈ 25 €, meio dia de viagem." },
+    "rio>ilha": { eur: 25, text: "Rio → Angra dos Reis e barco para a Ilha Grande: ≈ 25 €, cerca de 4 horas." },
+    "buzios>ilha": { eur: 45, text: "Búzios → Ilha Grande: via Rio, transfer e barco — ≈ 45 €, um dia inteiro de viagem." },
+    "ilha>paraty": { eur: 25, text: "Ilha Grande → Angra e Paraty: ≈ 25 €, meio dia de viagem." },
+    "paraty>rio": { eur: 20, text: "Paraty → Rio na volta, autocarro Costa Verde: ≈ 20 €, 4h30." },
+    "ilha>rio": { eur: 25, text: "Ilha Grande → Angra e Rio na volta: ≈ 25 €, cerca de 4 horas." }
+  };
+
+  route() {
+    const v = this.ROUTES[this.state.days];
+    if (!v) return [];
+    return (v[this.state.variant] || v[0]).legs;
+  }
+
+  routeLabel(days) {
+    const v = this.ROUTES[days];
+    if (!v) return "";
+    return v[0].legs.map(([k, n]) => this.PLACES[k].name.split(" e ")[0].replace("Rio de Janeiro", "Rio") + " " + n).join(" · ");
+  }
+
+  FAQS = [
+    { q: "É caro?", a: "O voo é a parte grande e é onde se ganha dinheiro: comprado com meses de antecedência muda tudo. O resto — estadia, comida, transportes — controlamos escolhendo a versão de 7, 10 ou 12 dias. Não te vou dar números inventados: fazemos as contas juntos com datas reais." },
+    { q: "É seguro?", a: "Rio pede o mesmo bom senso de qualquer cidade grande: telemóvel guardado, Uber à noite, praia sem coisas de valor, zonas conhecidas. Búzios e Paraty são bastante mais calmos. Vamos as duas juntas, sempre." },
+    { q: "E os bichos? Cobras?", a: "Não te prometo zero bichos, seria mentira. Nas cidades e nas praias urbanas não é tema. Em trilhos de mata atlântica há fauna: anda-se nos caminhos marcados, com ténis fechados e guia quando faz sentido. Se preferires, cortamos os trilhos e ficamos no mar." },
+    { q: "E se eu não gostar de aventura?", a: "Metade desta viagem é não fazer nada: pequeno-almoço lento, praia, jantar tarde. O helicóptero, o parapente e os trilhos são opcionais — e tu escolheste acima o que entra." },
+    { q: "Quando?", a: "Ainda não há datas. Verão brasileiro (dezembro a março) é mais quente e mais cheio; maio a setembro é mais seco e barato. Dizes-me duas semanas possíveis e eu procuro voos a sério." }
+  ];
+
+  VIBES = ["Praia", "Natureza", "Comida", "Noite", "Fotografia", "Não fazer nada"];
+  REASONS = ["É caro", "É longe", "Muita aventura", "Mais praia", "Mais conforto", "Outra coisa"];
+  PLANS = {
+    7: { title: "O essencial", body: "Rio e Búzios, três noites em cada. Sem estrada a mais, sem pressa a menos." },
+    10: { title: "A versão equilibrada", body: "Rio, Búzios e Paraty. Cidade, praia e mata atlântica, com folga em cada sítio." },
+    12: { title: "A que eu escolhia", body: "A mesma rota, com dias a mais em Paraty e sem plano nenhum. É onde a viagem deixa de parecer turismo." },
+    14: { title: "Sem correr", body: "Acrescenta Ilha Grande: barco, praias vazias, floresta. Duas semanas dá para chegar devagar a todos os sítios." }
+  };
+
+  componentDidMount() {
+    this.tilt = { x: 0, y: 0 };
+    this.onScroll = () => { if (!this.raf) this.raf = requestAnimationFrame(this.frame); };
+    this.frame = () => {
+      this.raf = null;
+      const vh = window.innerHeight;
+      this.mapProgress();
+      if (this.root) {
+        const layers = this.root.querySelectorAll("[data-depth]");
+        layers.forEach(el => {
+          const d = parseFloat(el.dataset.depth) || 0;
+          const r = el.parentElement.getBoundingClientRect();
+          const rel = (r.top + r.height / 2 - vh / 2) / vh;
+          el.style.transform = `translate3d(${this.tilt.x * d * 26}px, ${(-rel * d * 100 + this.tilt.y * d * 18).toFixed(2)}px, 0) scale(${1 + Math.abs(d) * 0.06})`;
+        });
+        const max = this.root.scrollHeight - vh;
+        if (this.bar) this.bar.style.width = Math.min(100, Math.max(0, (window.scrollY / max) * 100)) + "%";
+      }
+      if (this.flight) {
+        const r = this.flight.getBoundingClientRect();
+        const p = Math.min(1, Math.max(0, -r.top / (r.height - vh)));
+        const left = 9 - Math.round(p * 9), min = Math.round((1 - p) * 47);
+        if (this.clock) this.clock.textContent = String(left).padStart(2, "0") + ":" + String(min).padStart(2, "0");
+        if (this.dist) this.dist.textContent = this.fmt(7350 - Math.round(p * 7350)) + " km";
+        if (this.plane) this.plane.style.left = (p * 100).toFixed(2) + "%";
+        if (this.trail) this.trail.style.width = (p * 100).toFixed(2) + "%";
+        if (this.sun) { this.sun.style.opacity = Math.min(1, Math.max(0, (p - 0.12) / 0.55)); this.sun.style.transform = `translateY(${-p * 150}px)`; }
+      }
+    };
+    window.addEventListener("scroll", this.onScroll, { passive: true });
+    window.addEventListener("resize", this.onScroll);
+    this.onPointer = e => {
+      this.tilt.x = (e.clientX / window.innerWidth - 0.5) * 2;
+      this.tilt.y = (e.clientY / window.innerHeight - 0.5) * 2;
+      this.onScroll();
+    };
+    window.addEventListener("pointermove", this.onPointer, { passive: true });
+    this.onOrient = e => {
+      if (e.gamma == null) return;
+      this.tilt.x = Math.max(-1, Math.min(1, e.gamma / 30));
+      this.tilt.y = Math.max(-1, Math.min(1, ((e.beta || 45) - 45) / 30));
+      this.onScroll();
+    };
+    window.addEventListener("deviceorientation", this.onOrient);
+    this.frame();
+    this.paint();
+    this.runLoader();
+    this.runMarquee();
+    this.runCounters();
+    if (this.gallery) {
+      const g = this.gallery;
+      const upd = () => {
+        const i = Math.round(g.scrollLeft / (g.scrollWidth / 5)) + 1;
+        if (this.galCount) this.galCount.textContent = String(Math.min(5, Math.max(1, i))).padStart(2, "0") + " / 05";
+      };
+      g.addEventListener("scroll", upd, { passive: true });
+      let down = false, sx = 0, sl = 0;
+      g.addEventListener("pointerdown", e => { down = true; sx = e.clientX; sl = g.scrollLeft; g.style.cursor = "grabbing"; });
+      window.addEventListener("pointerup", () => { down = false; if (this.gallery) this.gallery.style.cursor = "grab"; });
+      g.addEventListener("pointermove", e => { if (down) g.scrollLeft = sl - (e.clientX - sx); });
+    }
+  }
+
+  runLoader() {
+    let p = 0;
+    const step = () => {
+      p = Math.min(100, p + Math.random() * 9 + 3);
+      if (this.pct) this.pct.textContent = Math.round(p) + "%";
+      if (this.loadBar) this.loadBar.style.width = p + "%";
+      if (p < 100) setTimeout(step, 90);
+      else setTimeout(() => {
+        if (this.loader) { this.loader.style.opacity = "0"; this.loader.style.visibility = "hidden"; this.loader.style.pointerEvents = "none"; }
+      }, 420);
+    };
+    setTimeout(step, 200);
+  }
+
+  runMarquee() {
+    if (!this.marquee) return;
+    const el = this.marquee;
+    el.innerHTML += el.innerHTML + el.innerHTML;
+    let x = 0;
+    const tick = () => {
+      x -= 0.14;
+      if (Math.abs(x) > el.scrollWidth / 3) x = 0;
+      el.style.transform = `translateX(${x}px)`;
+      this.marqueeRaf = requestAnimationFrame(tick);
+    };
+    tick();
+  }
+
+  mapProgress() {
+    if (!this.mapSec || !this.mapFrame || !this.mapFrame.contentWindow) return;
+    if (!this.mapReadyBound) {
+      this.mapReadyBound = true;
+      this.onMapMsg = e => { if (e.data && e.data.ready) { this.lastMapP = null; this.mapProgress(); } };
+      window.addEventListener("message", this.onMapMsg);
+    }
+    const r = this.mapSec.getBoundingClientRect();
+    const span = r.height + window.innerHeight;
+    const p = Math.min(1, Math.max(0, (window.innerHeight - r.top) / span));
+    const eased = Math.min(1, Math.max(0, (p - 0.14) / 0.44));
+    if (Math.abs((this.lastMapP || 0) - eased) < 0.004) return;
+    this.lastMapP = eased;
+    this.mapFrame.contentWindow.postMessage({ p: eased }, "*");
+  }
+
+  tickCount() {
+    if (!this.countEl) return;
+    const target = new Date("2027-03-03T13:55:00+00:00").getTime();
+    const paint = () => {
+      if (!this.countEl) return;
+      let ms = target - Date.now();
+      if (ms < 0) ms = 0;
+      const d = Math.floor(ms / 864e5), h = Math.floor(ms / 36e5) % 24, m = Math.floor(ms / 6e4) % 60, sec = Math.floor(ms / 1e3) % 60;
+      const cell = (v, l) => '<div><div style="font-weight:800;font-size:clamp(30px,7vw,44px);letter-spacing:-.04em;line-height:.95;color:#FF5B2E">' + String(v).padStart(2, "0") + '</div><div style="font-family:\'IBM Plex Mono\',monospace;font-size:9px;letter-spacing:.2em;color:rgba(245,241,234,.5);margin-top:6px">' + l + '</div></div>';
+      this.countEl.innerHTML = cell(d, "DIAS") + cell(h, "HORAS") + cell(m, "MIN") + cell(sec, "SEG");
+    };
+    paint();
+    clearInterval(this.countTimer);
+    this.countTimer = setInterval(paint, 1000);
+  }
+
+  toggleSound() {
+    if (this.audioOn) { this.fadeOut(); return; }
+    if (!this.audioEl) {
+      const a = new Audio("audio/mas-que-nada.webm");
+      a.loop = true; a.volume = 0; a.preload = "auto";
+      this.audioEl = a;
+    }
+    this.audioOn = true;
+    this.audioEl.play().then(() => this.fadeTo(0.42, 1600)).catch(() => { this.audioOn = false; this.paintSound(); });
+    this.paintSound();
+  }
+
+  fadeTo(target, ms) {
+    clearInterval(this.fadeTimer);
+    const a = this.audioEl;
+    if (!a) return;
+    const from = a.volume, t0 = performance.now();
+    this.fadeTimer = setInterval(() => {
+      const k = Math.min(1, (performance.now() - t0) / ms);
+      a.volume = Math.max(0, Math.min(1, from + (target - from) * k));
+      if (k >= 1) clearInterval(this.fadeTimer);
+    }, 40);
+  }
+
+  fadeOut() {
+    this.audioOn = false;
+    this.fadeTo(0, 600);
+    setTimeout(() => { if (!this.audioOn && this.audioEl) this.audioEl.pause(); }, 700);
+    this.paintSound();
+  }
+
+  paintSound() {
+    if (this.soundDot) {
+      this.soundDot.style.background = this.audioOn ? "#FF5B2E" : "rgba(245,241,234,.35)";
+      this.soundDot.style.boxShadow = this.audioOn ? "0 0 10px rgba(255,91,46,.9)" : "none";
+    }
+    if (this.soundLabel) this.soundLabel.textContent = this.audioOn ? "MAS QUE NADA" : "SOM";
+    if (this.soundBtn) this.soundBtn.style.borderColor = this.audioOn ? "rgba(255,91,46,.6)" : "rgba(245,241,234,.2)";
+  }
+
+  runCounters() {
+    if (!this.root || !("IntersectionObserver" in window)) return;
+    const io = new IntersectionObserver(entries => {
+      entries.forEach(en => {
+        if (!en.isIntersecting || en.target.dataset.done) return;
+        en.target.dataset.done = "1";
+        const out = en.target.firstElementChild;
+        const final = out.textContent;
+        const num = parseFloat(en.target.dataset.count);
+        const unit = en.target.dataset.unit || "";
+        if (!num) return;
+        const t0 = performance.now(), dur = 1100;
+        const tick = now => {
+          const k = Math.min(1, (now - t0) / dur), e = 1 - Math.pow(1 - k, 3);
+          out.textContent = this.fmt(Math.round(num * e)) + unit;
+          if (k < 1) requestAnimationFrame(tick); else out.textContent = final;
+        };
+        requestAnimationFrame(tick);
+      });
+    }, { threshold: 0.5 });
+    this.root.querySelectorAll("[data-count]").forEach(el => io.observe(el));
+  }
+
+  componentWillUnmount() {
+    clearInterval(this.countTimer);
+    clearInterval(this.fadeTimer);
+    if (this.audioEl) { this.audioEl.pause(); this.audioEl = null; }
+    if (this.onMapMsg) window.removeEventListener("message", this.onMapMsg);
+
+    window.removeEventListener("scroll", this.onScroll);
+    window.removeEventListener("resize", this.onScroll);
+    window.removeEventListener("pointermove", this.onPointer);
+    window.removeEventListener("deviceorientation", this.onOrient);
+  }
+
+  componentDidUpdate() { this.paint(); }
+
+  summary() {
+    const d = this.state.days;
+    const route = this.route();
+    const acts = this.state.acts || [];
+    const picked = Object.values(this.PLACES).flatMap(p => p.acts).filter(a => acts.includes(a.id));
+    const L = ["E se fôssemos? — Porto → Rio de Janeiro", this.dateRange() + " · voo TAP direto, 789 € por pessoa"];
+    if (d) {
+      L.push("", d + " dias: " + route.map(([k, n]) => this.PLACES[k].name.split(" e ")[0] + " " + n + (n === 1 ? " noite" : " noites")).join(" · "));
+      if (this.total) L.push("Total estimado: ≈ " + this.fmt(this.total) + " € por pessoa, tudo incluído");
+    }
+    if (this.state.vibes.length) L.push("", "O que ela quer: " + this.state.vibes.join(", ").toLowerCase());
+    if (picked.length) L.push("", "Escolhido para fazer:", ...picked.map(a => "· " + a.label + " (" + a.price + ")"));
+    if (this.state.reasons.length) L.push("", "A resolver: " + this.state.reasons.join(", "));
+    return L.join("\n");
+  }
+
+  dateRange() {
+    const d = this.state.days;
+    if (!d) return "Início de março";
+    const end = new Date(Date.UTC(2027, 2, 3 + d - 1));
+    const meses = ["janeiro","fevereiro","março","abril","maio","junho","julho","agosto","setembro","outubro","novembro","dezembro"];
+    const m = end.getUTCMonth();
+    return m === 2 ? "3 a " + end.getUTCDate() + " de março" : "3 de março a " + end.getUTCDate() + " de " + meses[m];
+  }
+
+  diary() {
+    const route = this.route();
+    if (!route.length) return [];
+    const acts = this.state.acts || [];
+    const start = new Date(Date.UTC(2027, 2, 3));
+    const fmtDate = i => {
+      const d = new Date(start.getTime() + i * 864e5);
+      return String(d.getUTCDate()).padStart(2, "0") + " MAR";
+    };
+    const out = [];
+    let dayIdx = 0;
+    route.forEach(([key, nights], legI) => {
+      const p = this.PLACES[key];
+      const picked = p.acts.filter(a => acts.includes(a.id));
+      const need = Math.max(1, nights - 1);
+      const pool = picked.length >= need ? picked : [...picked, ...p.acts.filter(a => !picked.includes(a))].slice(0, need);
+      for (let n = 0; n < nights; n++) {
+        const first = n === 0;
+        let text;
+        if (legI === 0 && first) {
+          text = "Aterramos às 21:25, com o calor a entrar pela porta do aeroporto. Uber até ao hotel, e ainda dá para descer à praia só para ver se é verdade.";
+        } else if (first) {
+          text = "Manhã de estrada. " + this.arriveLine(key);
+        } else {
+          const a = pool[n - 1];
+          text = a ? a.label + ". " + a.note : "Dia sem plano. Praia, e o que aparecer.";
+        }
+        out.push({ n: String(dayIdx + 1).padStart(2, "0"), date: fmtDate(dayIdx), place: p.name.toUpperCase(), text });
+        dayIdx++;
+      }
+    });
+    const lastKey = route[route.length - 1][0];
+    const backLine = { buzios: "Autocarro de volta de Búzios, três horas e meia a dormir contra a janela. ",
+      paraty: "Autocarro de volta de Paraty pela estrada da costa, quatro horas e meia. ",
+      ilha: "Barco da Ilha Grande até Angra e estrada para o Rio. ", rio: "" }[lastKey] || "";
+    out.push({
+      n: String(dayIdx + 1).padStart(2, "0"), date: fmtDate(dayIdx),
+      place: "VOLTA AO RIO · GALEÃO",
+      text: backLine + "Último café no aeroporto, mala mal fechada e voo às 23:25. Chegamos ao Porto ao meio-dia do dia seguinte, com areia dentro dos sapatos."
+    });
+    return out;
+  }
+
+  arriveLine(key) {
+    return {
+      buzios: "Búzios aparece de repente, com barcos parados na água e ruas de pedra. Tarde na Geribá a não fazer nada.",
+      paraty: "Paraty é toda de pedra irregular e casas brancas. Fim de tarde a andar sem mapa pelo centro.",
+      ilha: "Barco para a Ilha Grande. Não há carros — a mala vai atrás de ti pela areia.",
+      rio: "O Rio outra vez, e desta vez já sabemos onde ficam as coisas."
+    }[key] || "";
+  }
+
+  fmt(n) { return String(n).replace(/\B(?=(\d{3})+(?!\d))/g, "\u2009"); }
+
+  costRows() {
+    const days = this.state.days;
+    const route = this.route();
+    const nights = route.reduce((n, [, k]) => n + k, 0);
+    const rioN = (route.find(r => r[0] === "rio") || [0, 0])[1];
+    const otherN = nights - rioN;
+    const acts = this.state.acts || [];
+    const picked = Object.values(this.PLACES).flatMap(p => p.acts).filter(a => acts.includes(a.id));
+    const actsEur = picked.reduce((t, a) => t + a.eur, 0);
+    const stay = rioN * 40 + otherN * 55;
+    const food = rioN * 22 + otherN * 12 + 22;
+    const others = route.filter(r => r[0] !== "rio");
+    const otherNames = others.map(([k]) => this.PLACES[k].name.split(" e ")[0]);
+    const listNames = otherNames.length > 1
+      ? otherNames.slice(0, -1).join(", ") + " e " + otherNames[otherNames.length - 1]
+      : (otherNames[0] || "");
+    const hops = route.slice(1).map(([k], i) => this.HOPS[route[i][0] + ">" + k]).filter(Boolean);
+    const lastKey = route.length ? route[route.length - 1][0] : "rio";
+    const back = lastKey !== "rio" ? this.HOPS[lastKey + ">rio"] : null;
+    if (back) hops.push(back);
+    const transp = 25 + 20 + hops.reduce((t, h) => t + h.eur, 0);
+    this.total = days ? 789 + stay + food + transp + actsEur : null;
+    const e = n => "≈ € " + this.fmt(n);
+    return [
+      { label: "Voo Porto → Rio, ida e volta", note: "789 € POR PESSOA · TAP DIRETO · TOCA PARA VER", value: "€ 789", details: [
+        "3 a 12 de março, TAP direto: 789 € por pessoa (1 578 € pelos dois). Foi este o preço que vi.",
+        "Se ficarmos mais dias, a data de volta muda e o preço também — a ordem de grandeza é a mesma.",
+        "Ida 13:55 → 21:25, 10h30 sem escalas. Volta 23:25 → 12:20 do dia seguinte.",
+        "Mais barato no mesmo ecrã: 756 €, mas com 22h50 de viagem e escalas.",
+        "Se pudermos andar dois dias: 5 a 14 de março estava a 662 €, e 6 a 15 a 664 €.",
+        "Março é normalmente o mês mais barato do ano nesta rota."
+      ]},
+      { label: "Hotéis", note: days ? nights + " NOITES · 4 ESTRELAS · TOCA PARA VER" : "DEPENDE DOS DIAS", value: days ? e(stay) : "—", details: days ? [
+        "Rio: " + rioN + " noites em hotel de 4 estrelas em Copacabana ou Ipanema, com pequeno-almoço — ≈ 80 €/noite o quarto duplo, ou 40 € por pessoa.",
+        otherN ? listNames + ": " + otherN + " noites em pousada de 4 estrelas com meia pensão (pequeno-almoço e jantar) — ≈ 110 €/noite o quarto, ou 55 € por pessoa." : null,
+        "Valores de referência: diárias de 4 estrelas em Copacabana começam por volta de R$ 363–412 fora de época alta.",
+        "Hotéis concretos ficam para escolher depois das datas fechadas."
+      ].filter(Boolean) : [] },
+      { label: "Comer e beber", note: days ? "PEQUENO-ALMOÇO E JANTARES JÁ INCLUÍDOS" : "DEPENDE DOS DIAS", value: days ? e(food) : "—", details: days ? [
+        "No Rio: " + rioN + " dias × 22 € — almoço, água de coco, uma cerveja e um jantar bom.",
+        "Sítios em condições que dão para este valor: almoço a peso no Fellini ou no Zona Sul, feijoada no Bar do Mineiro em Santa Teresa, camarão no Bar Urca em pé no muro, e pizza na Braz em Ipanema.",
+        "Se quisermos gastar mais uma noite: churrasco na Fogo de Chão ou peixe no Aprazível, com vista sobre a cidade — aí conta 45 a 60 € por pessoa.",
+        otherN ? "Em " + listNames + ": " + otherN + " dias × 12 €, porque o jantar já vem com o hotel." : null,
+        otherN ? "Fica só o almoço — " + others.map(([k]) => this.PLACES[k].lunch).join("; ") + "." : null,
+        "Mais 22 € para o dia de chegada e o de partida.",
+        "Não conta os jantares especiais que escolheres acima como atividade."
+      ].filter(Boolean) : [] },
+      { label: "Transportes no Brasil", note: days ? "AUTOCARROS, TRANSFERES E UBER · TOCA PARA VER" : "DEPENDE DA ROTA", value: days ? e(transp) : "—", details: days ? [
+        "Galeão → hotel e hotel → Galeão, de Uber: ≈ 25 €.",
+        ...hops.map(h => h.text),
+        "Ubers e barcos locais no dia a dia: ≈ 20 €."
+      ] : [] },
+      { label: "Atividades escolhidas", note: acts.length ? acts.length + " ESCOLHIDAS ACIMA · TOCA PARA VER" : "AINDA NENHUMA", value: e(actsEur), details: picked.length ? picked.map(a => a.label + " — " + a.price) : ["Ainda não escolheste nenhuma. Sobe e toca no que te apetece."] }
+    ];
+  }
+
+  paint() {
+    const on = (el, active) => {
+      if (!el) return;
+      el.style.background = active ? "#FF5B2E" : "transparent";
+      el.style.color = active ? "#0B0D0F" : "#F5F1EA";
+      el.style.borderColor = active ? "#FF5B2E" : "rgba(245,241,234,.22)";
+      el.querySelectorAll("span, div").forEach(sub => {
+        if (!("baseColor" in sub.dataset)) sub.dataset.baseColor = sub.style.color || "inherit";
+        sub.style.color = active ? "rgba(11,13,15,.78)" : sub.dataset.baseColor;
+      });
+    };
+    if (this.root) this.root.querySelectorAll("[data-on]").forEach(b => on(b, b.getAttribute("data-on") === "true"));
+    if (this.vibeEcho) {
+      const v = this.state.vibes;
+      this.vibeEcho.textContent = !v.length ? "" :
+        v.includes("Natureza") && v.includes("Praia") ? "Então é a estrada: Rio, e depois o litoral até Paraty." :
+        v.includes("Noite") ? "Rio e Búzios, sem dúvida. Jantar tarde e voltar a pé." :
+        v.includes("Não fazer nada") ? "Fica combinado: três dias sem plano nenhum." :
+        "Anotado. Isso muda o que vale a pena ver.";
+    }
+    on(this.heliYes, this.state.heli === true);
+    on(this.heliNo, this.state.heli === false);
+    if (this.heliEcho) this.heliEcho.textContent = this.state.heli === null ? "" : this.state.heli ?
+      "Vinte minutos de helicóptero, a baía toda de cima. Preço depende do operador e da data — fica por confirmar." :
+      "Miradouro, então. Subimos ao Dona Marta com uma cerveja e ficamos até escurecer.";
+    if (this.planEl) {
+      const p = this.PLANS[this.state.days];
+      this.planEl.style.opacity = p ? "1" : ".35";
+      if (this.planBody) this.planBody.textContent = p ? p.body : "Escolhe um número acima.";
+    }
+    if (this.actIntro) this.actIntro.textContent = this.state.days
+      ? "Com " + this.state.days + " dias, passamos por estes sítios. Toca no que queres fazer — o orçamento em baixo acompanha."
+      : "Escolhe primeiro os dias acima — os destinos aparecem aqui.";
+    if (this.costTitle) this.costTitle.textContent = this.dateRange() + ", por pessoa.";
+    if (this.shareBox) this.shareBox.value = String(this.summary());
+    if (this.totalEl) this.totalEl.textContent = this.total ? "≈ € " + this.fmt(this.total) : "—";
+  }
+
+  renderVals() {
+    const toggle = (key, list, value) => () => this.setState(s => {
+      const arr = s[key].includes(value) ? s[key].filter(x => x !== value) : [...s[key], value];
+      return { [key]: arr };
+    });
+    return {
+      setRoot: el => { this.root = el; },
+      setBar: el => { this.bar = el; },
+      setFlight: el => { this.flight = el; },
+      setClock: el => { this.clock = el; },
+      setDist: el => { this.dist = el; },
+      setPlane: el => { this.plane = el; },
+      setMapSec: el => { this.mapSec = el; },
+      setMapFrame: el => { this.mapFrame = el; },
+      mapLoaded: () => { this.lastMapP = null; this.mapProgress(); },
+      setCount: el => { this.countEl = el; this.tickCount(); },
+      setSoundBtn: el => { this.soundBtn = el; },
+      setSoundDot: el => { this.soundDot = el; },
+      setSoundLabel: el => { this.soundLabel = el; },
+      toggleSound: () => this.toggleSound(),
+      setTrail: el => { this.trail = el; },
+      setSun: el => { this.sun = el; },
+      setVibes: el => { this.vibesEl = el; this.paint(); },
+      setVibeEcho: el => { this.vibeEcho = el; },
+      setHeliYes: el => { this.heliYes = el; this.paint(); },
+      setHeliNo: el => { this.heliNo = el; },
+      setHeliEcho: el => { this.heliEcho = el; },
+      setPlan: el => { this.planEl = el; },
+      setPlanBody: el => { this.planBody = el; },
+      setBoardLabel: el => { this.boardLabel = el; },
+      setBoardStamp: el => { this.boardStamp = el; },
+      setEnd: el => { this.endEl = el; },
+      hasVariants: !!(this.ROUTES[this.state.days] || []).length && (this.ROUTES[this.state.days] || []).length > 1,
+      variants: (this.ROUTES[this.state.days] || []).map((v, i) => ({
+        label: v.label, on: this.state.variant === i,
+        pick: () => this.setState({ variant: i })
+      })),
+      places: this.route().map(([key, nights]) => {
+        const p = this.PLACES[key];
+        const open = (this.state.moreOpen || []).includes(key);
+        const shown = open ? p.acts : p.acts.slice(0, 6);
+        return {
+          name: p.name, mood: p.mood, nights: nights + (nights === 1 ? " NOITE" : " NOITES"),
+          hasMore: p.acts.length > 6,
+          moreLabel: open ? "MOSTRAR MENOS" : "VER MAIS " + (p.acts.length - 6) + " EM " + p.name.split(" e ")[0].toUpperCase(),
+          toggleMore: () => this.setState(st => ({ moreOpen: (st.moreOpen || []).includes(key) ? st.moreOpen.filter(k => k !== key) : [...(st.moreOpen || []), key] })),
+          acts: shown.map(a => ({
+            ...a, on: this.state.acts.includes(a.id),
+            pick: () => this.setState(s => ({ acts: s.acts.includes(a.id) ? s.acts.filter(x => x !== a.id) : [...s.acts, a.id] }))
+          }))
+        };
+      }),
+      diary: this.diary(),
+      costRows: this.costRows().map((r, i) => ({
+        ...r, open: this.state.openCost === i, sign: this.state.openCost === i ? "−" : "+",
+        toggle: () => this.setState(s => ({ openCost: s.openCost === i ? null : i }))
+      })),
+      setActIntro: el => { this.actIntro = el; },
+      setTotal: el => { this.totalEl = el; },
+      setCostTitle: el => { this.costTitle = el; },
+      setLoader: el => { this.loader = el; },
+      setPct: el => { this.pct = el; },
+      setLoadBar: el => { this.loadBar = el; },
+      setMarquee: el => { this.marquee = el; },
+      setGallery: el => { this.gallery = el; },
+      setGalCount: el => { this.galCount = el; },
+      figures: this.FIGURES.map(f => ({ ...f, unit: f.unit || "", label: f.label.replace("\n", " ") })),
+      faqs: this.FAQS.map((f, i) => ({
+        num: String(i + 1).padStart(2, "0"), q: f.q, a: f.a,
+        open: this.state.open === i,
+        sign: this.state.open === i ? "−" : "+",
+        toggle: () => this.setState(s => ({ open: s.open === i ? null : i }))
+      })),
+      vibes: this.VIBES.map(label => ({ label, on: this.state.vibes.includes(label), pick: toggle("vibes", null, label) })),
+      durations: [7, 10, 12, 14].map(days => ({
+        days, title: this.PLANS[days].title, route: this.routeLabel(days) + " noites",
+        on: this.state.days === days,
+        pick: () => this.setState({ days, variant: 0 })
+      })),
+      reasons: this.REASONS.map(label => ({ label, on: this.state.reasons.includes(label), pick: toggle("reasons", null, label) })),
+      showReasons: this.state.showReasons,
+      shared: this.state.shared,
+      heliYes: () => this.setState({ heli: true }),
+      heliNo: () => this.setState({ heli: false }),
+      board: () => {
+        if (this.boardLabel) this.boardLabel.textContent = "Embarque autorizado ✈";
+        if (this.boardStamp) {
+          this.boardStamp.style.opacity = "1";
+          this.boardStamp.style.transform = "rotate(-7deg) scale(1)";
+        }
+        // o mapa é a cena seguinte — saltar para o voo passava-lhe à frente
+        const next = this.mapSec || this.flight;
+        if (next) window.scrollTo({ top: window.scrollY + next.getBoundingClientRect().top - 40, behavior: "smooth" });
+      },
+      yes: () => {
+        this.setState({ showReasons: false });
+        if (this.endEl) this.endEl.innerHTML = '<div style="font-size:17px;line-height:1.6;color:#FF5B2E;font-weight:600">Então está combinado. Falta só o calendário.</div>';
+      },
+      notYet: () => {
+        this.setState({ showReasons: true });
+        if (this.endEl) this.endEl.innerHTML = '<div style="font-size:16px;line-height:1.6;color:rgba(245,241,234,.75)">Tudo bem. Diz-me o que trava e eu mudo a viagem.</div>';
+      },
+      shareText: String(this.summary()),
+      shareMsg: this.state.shareMsg || "",
+      setShareBox: el => { this.shareBox = el; if (el) el.value = String(this.summary()); },
+      shareWhats: () => {
+        window.open("https://wa.me/?text=" + encodeURIComponent(this.summary()), "_blank", "noopener");
+      },
+      share: async () => {
+        const text = this.summary();
+        let msg = "COPIADO — COLA ONDE QUISERES";
+        try {
+          if (navigator.clipboard && window.isSecureContext) await navigator.clipboard.writeText(text);
+          else throw new Error("no clipboard");
+        } catch (e) {
+          msg = "SELECIONA O TEXTO EM BAIXO E COPIA";
+        }
+        this.setState({ shared: true, shareMsg: msg }, () => {
+          if (this.shareBox) { this.shareBox.focus(); this.shareBox.select(); }
+        });
+      }
+    };
+  }
+}
+</script>
+</body>
+</html>
