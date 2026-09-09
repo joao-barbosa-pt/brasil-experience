@@ -1,0 +1,110 @@
+<!doctype html>
+<html lang="pt">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Etapa</title>
+<link href="https://fonts.googleapis.com/css2?family=Archivo:wght@400;600;800&family=IBM+Plex+Mono:wght@400&display=swap" rel="stylesheet" />
+<script src="https://unpkg.com/d3@7.9.0/dist/d3.min.js" integrity="sha384-CjloA8y00+1SDAUkjs099PVfnY2KmDC2BZnws9kh8D/lX1s46w6EPhpXdqMfjK6i" crossorigin="anonymous"></script>
+<script src="https://unpkg.com/topojson-client@3.1.0/dist/topojson-client.min.js" integrity="sha384-Ukv1p/xTma6P4/2bY5KzWBw+ydSpXmhCMtyciIQVDJ1RmOxtCYNMF1uXT9T63H67" crossorigin="anonymous"></script>
+<style>
+  html, body { margin: 0; height: 100%; overflow: hidden;
+    background: radial-gradient(120% 100% at 50% 30%, #12171C, #0B0D0F 78%);
+    font-family: Archivo, system-ui, sans-serif; color: #F5F1EA; }
+  svg { display: block; width: 100%; height: 100%; }
+  text { font-family: 'IBM Plex Mono', ui-monospace, monospace; font-size: 9.5px; letter-spacing: .16em; fill: rgba(245,241,234,.7); }
+  text.city { font-size: 11px; letter-spacing: .18em; fill: #F5F1EA; }
+  text.km { font-family: Archivo, sans-serif; font-size: 26px; font-weight: 800; letter-spacing: -.03em; fill: #FF5B2E; }
+  text.meta { font-size: 9px; letter-spacing: .2em; fill: rgba(245,241,234,.5); }
+</style>
+</head>
+<body>
+<svg id="leg"></svg>
+<script>
+// só o fragmento: o endereço da pré-visualização traz um token que não é nosso
+const q = new URLSearchParams(location.hash.slice(1));
+const coord = (v, d) => {
+  const p = String(v || "").split(",").map(Number);
+  return p.length === 2 && p.every(n => isFinite(n)) ? p : d;
+};
+const label = (v, d) => {
+  const s = String(v || "").trim();
+  return s && s.length <= 26 && /^[\p{L}0-9 .+·→-]+$/u.test(s) ? s : d;
+};
+const A = coord(q.get("a"), [-43.1729, -22.9068]);
+const B = coord(q.get("b"), [-41.8817, -22.7469]);
+const AN = label(q.get("an"), "RIO DE JANEIRO"), BN = label(q.get("bn"), "BÚZIOS");
+const KM = label(q.get("km"), "176"), TIME = label(q.get("t"), "3H10"), MODE = label(q.get("mode"), "AUTOCARRO");
+
+const arc = d3.geoInterpolate(A, B);
+const pts = d3.range(0, 121).map(i => arc(i / 120));
+
+function draw(land) {
+  const svg = d3.select("#leg");
+  const W = document.body.clientWidth, H = document.body.clientHeight;
+  svg.attr("viewBox", `0 0 ${W} ${H}`).selectAll("*").remove();
+  // A 176 km de distância um enquadramento justo torna a costa irreconhecível:
+  // alarga-se para um mínimo regional, onde a linha de costa se lê.
+  const cx = (A[0] + B[0]) / 2, cy = (A[1] + B[1]) / 2;
+  const pad = Math.max(20, W * 0.05);
+  const boxW = W - pad * 2, boxH = H * 0.7;
+  const spanX = Math.max(Math.abs(A[0] - B[0]) * 1.45, 1.9);
+  // a moldura geográfica tem de ter a proporção da caixa, senão sobra vazio
+  const spanY = spanX * (boxH / boxW) / Math.cos(cy * Math.PI / 180);
+  const frame = { type: "LineString", coordinates: [
+    [cx - spanX / 2, cy + spanY / 2], [cx + spanX / 2, cy - spanY / 2]
+  ]};
+  const proj = d3.geoMercator().fitExtent([[pad, H * 0.24], [W - pad, H * 0.94]], frame);
+  const path = d3.geoPath(proj);
+
+  svg.append("g").selectAll("path").data(land.features).join("path")
+    .attr("d", path).attr("fill", "rgba(245,241,234,.1)")
+    .attr("stroke", "rgba(245,241,234,.28)").attr("stroke-width", 0.7);
+
+  const line = { type: "LineString", coordinates: pts };
+  svg.append("path").attr("d", path(line)).attr("fill", "none")
+    .attr("stroke", "rgba(245,241,234,.16)").attr("stroke-width", 1).attr("stroke-dasharray", "3 5");
+
+  const live = svg.append("path").attr("fill", "none").attr("stroke", "#FF5B2E")
+    .attr("stroke-width", 2).attr("stroke-linecap", "round");
+
+  [[A, AN], [B, BN]].forEach(([c, n], i) => {
+    const p = proj(c);
+    const anchor = p[0] > W * 0.6 ? "end" : "start";
+    const dx = anchor === "end" ? -11 : 11;
+    svg.append("circle").attr("cx", p[0]).attr("cy", p[1]).attr("r", 4).attr("fill", "#FF5B2E");
+    svg.append("circle").attr("cx", p[0]).attr("cy", p[1]).attr("r", 9)
+      .attr("fill", "none").attr("stroke", "rgba(255,91,46,.35)").attr("stroke-width", 1);
+    svg.append("text").attr("class", "city").attr("x", p[0] + dx)
+      .attr("y", p[1] + (i === 0 ? 18 : -12)).attr("text-anchor", anchor).text(n);
+  });
+
+  svg.append("text").attr("class", "km").attr("x", W / 2).attr("y", H * 0.17)
+    .attr("text-anchor", "middle").text(KM + " km");
+  svg.append("text").attr("class", "meta").attr("x", W / 2).attr("y", H * 0.17 + 18)
+    .attr("text-anchor", "middle").text(MODE + " · " + TIME);
+
+  const dot = svg.append("circle").attr("r", 3).attr("fill", "#F5F1EA").attr("opacity", 0);
+
+  const t0 = performance.now(), dur = 2200;
+  (function tick(now) {
+    const k = Math.min(1, ((now || performance.now()) - t0) / dur);
+    const e = k < .5 ? 2 * k * k : 1 - Math.pow(-2 * k + 2, 2) / 2;
+    const n = Math.max(1, Math.round(e * (pts.length - 1)));
+    live.attr("d", path({ type: "LineString", coordinates: pts.slice(0, n + 1) }));
+    const h = proj(pts[n]);
+    dot.attr("cx", h[0]).attr("cy", h[1]).attr("opacity", e > .02 && e < .99 ? 1 : 0);
+    if (k < 1) requestAnimationFrame(tick);
+  })();
+}
+
+d3.json("https://cdn.jsdelivr.net/npm/world-atlas@2.0.2/countries-50m.json").then(topo => {
+  const land = topojson.feature(topo, topo.objects.countries);
+  draw(land);
+  try { parent.postMessage({ legReady: true }, "*"); } catch (e) {}
+  let t;
+  addEventListener("resize", () => { clearTimeout(t); t = setTimeout(() => draw(land), 160); });
+});
+</script>
+</body>
+</html>
