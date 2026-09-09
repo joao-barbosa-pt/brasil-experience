@@ -7,7 +7,7 @@
 <script src="https://unpkg.com/d3@7.9.0/dist/d3.min.js" integrity="sha384-CjloA8y00+1SDAUkjs099PVfnY2KmDC2BZnws9kh8D/lX1s46w6EPhpXdqMfjK6i" crossorigin="anonymous"></script>
 <script src="https://unpkg.com/topojson-client@3.1.0/dist/topojson-client.min.js" integrity="sha384-Ukv1p/xTma6P4/2bY5KzWBw+ydSpXmhCMtyciIQVDJ1RmOxtCYNMF1uXT9T63H67" crossorigin="anonymous"></script>
 <style>
-  html, body { margin: 0; height: 100%; background: transparent; overflow: hidden; }
+  html, body { margin: 0; height: 100%; background: #0B0D0F; overflow: hidden; }
   svg { display: block; width: 100%; height: 100%; }
   text { font-family: 'IBM Plex Mono', ui-monospace, monospace; font-size: 10px; letter-spacing: .16em; fill: rgba(245,241,234,.72); }
   text.city { letter-spacing: .18em; fill: #F5F1EA; }
@@ -32,10 +32,18 @@ function draw(land) {
   W = box.width; H = box.height;
   svg.attr("viewBox", `0 0 ${W} ${H}`).selectAll("*").remove();
 
-  proj = d3.geoMercator().fitExtent(
-    [[W * 0.06, H * 0.08], [W * 0.94, H * 0.92]],
-    { type: "LineString", coordinates: [[-56, 46], [4, -32]] }
-  );
+  const cx = (PORTO[0] + RIO[0]) / 2, cy = (PORTO[1] + RIO[1]) / 2;
+  const pad = Math.max(18, W * 0.05);
+  const boxW = W - pad * 2, boxH = H - pad * 2;
+  const needX = Math.abs(PORTO[0] - RIO[0]) * 1.12;
+  const needY = Math.abs(PORTO[1] - RIO[1]) * 1.12;
+  // a moldura geográfica assume a proporção da caixa: sem isto o mapa fica torto
+  const ratio = boxH / boxW;
+  let spanX = Math.max(needX, needY / ratio);
+  const frame = { type: "LineString", coordinates: [
+    [cx - spanX / 2, cy + spanX * ratio / 2], [cx + spanX / 2, cy - spanX * ratio / 2]
+  ]};
+  proj = d3.geoMercator().fitExtent([[pad, pad], [W - pad, H - pad]], frame);
   path = d3.geoPath(proj);
 
   svg.append("g").selectAll("path").data(land.features).join("path")
@@ -55,12 +63,17 @@ function draw(land) {
     const p = proj(c.c);
     g.append("circle").attr("cx", p[0]).attr("cy", p[1]).attr("r", 3.5)
       .attr("fill", "#FF5B2E");
-    g.append("text").attr("class", "city").attr("x", p[0] + c.dx).attr("y", p[1] + c.dy)
-      .attr("text-anchor", c.anchor).text(c.n);
+    const anchor = p[0] > W * 0.62 ? "end" : "start";
+    g.append("text").attr("class", "city")
+      .attr("x", p[0] + (anchor === "end" ? -10 : 10))
+      .attr("y", Math.min(H - 10, Math.max(16, p[1] + c.dy)))
+      .attr("text-anchor", anchor).text(c.n);
   });
 
-  layers.plane = svg.append("text").attr("font-size", "15px").attr("fill", "#FF5B2E")
-    .attr("text-anchor", "middle").attr("dominant-baseline", "central").text("✈");
+  layers.head = svg.append("g");
+  layers.head.append("circle").attr("r", 12).attr("fill", "rgba(255,91,46,.16)");
+  layers.head.append("circle").attr("r", 6).attr("fill", "rgba(255,91,46,.32)");
+  layers.head.append("circle").attr("r", 3).attr("fill", "#FF5B2E");
   layers.km = svg.append("text").attr("text-anchor", "middle").attr("fill", "rgba(245,241,234,.6)");
   render();
 }
@@ -71,12 +84,10 @@ function render() {
   const pts = arcPts.slice(0, n + 1);
   layers.live.attr("d", path({ type: "LineString", coordinates: pts }));
   const head = proj(arcPts[n]);
-  const prev = proj(arcPts[Math.max(0, n - 1)]);
-  const ang = Math.atan2(head[1] - prev[1], head[0] - prev[0]) * 180 / Math.PI;
-  layers.plane.attr("transform", `translate(${head[0]},${head[1]}) rotate(${ang})`)
+  layers.head.attr("transform", `translate(${head[0]},${head[1]})`)
     .attr("opacity", progress > 0.01 && progress < 0.995 ? 1 : 0);
   const left = Math.round(7350 * (1 - progress));
-  layers.km.attr("x", head[0]).attr("y", head[1] - 16)
+  layers.km.attr("x", Math.min(W - 46, Math.max(46, head[0]))).attr("y", Math.max(18, head[1] - 16))
     .attr("opacity", progress > 0.04 && progress < 0.97 ? 1 : 0)
     .text(String(left).replace(/\B(?=(\d{3})+(?!\d))/g, "\u2009") + " KM");
 }
